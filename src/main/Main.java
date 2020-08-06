@@ -120,6 +120,13 @@ public class Main {
                 }
             }
 
+            try {
+                soundbank = new SF2Soundbank(new File("gm.sf2"));
+                soundbank = new DLSSoundbank(new File("gm.dls"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
             synthesizer.close();
         }
     }
@@ -127,16 +134,14 @@ public class Main {
     protected void onCreate() {
         try {
             justToAvoidUnused();
-            soundbank = Math.random() < 0.5
-                    ? new SF2Soundbank(new File("gm.sf2"))
-                    : new DLSSoundbank(new File("gm.dls"));
 
             synthesizer = new SoftSynthesizer();
             if (!synthesizer.isOpen()) {
                 synthesizer.open();
             }
 
-            synthesizer.unloadAllInstruments(synthesizer.getDefaultSoundbank());
+            soundbank = synthesizer.getDefaultSoundbank();
+            synthesizer.unloadAllInstruments(soundbank);
 
             if (!TRUE) {
                 final StringBuilder stringBuilder = new StringBuilder();
@@ -151,7 +156,7 @@ public class Main {
 
             channel = synthesizer.getChannels()[0];
             ready = true;
-        } catch (IOException | gervill.javax.sound.midi.MidiUnavailableException e) {
+        } catch (gervill.javax.sound.midi.MidiUnavailableException e) {
             throw new RuntimeException(e);
         }
     }
