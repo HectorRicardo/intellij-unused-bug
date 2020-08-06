@@ -46,6 +46,7 @@ import gervill.javax.sound.sampled.spi.AudioFileReader;
  */
 public final class WaveFloatFileReader extends AudioFileReader {
 
+    @Override
     public AudioFileFormat getAudioFileFormat(InputStream stream)
             throws UnsupportedAudioFileException, IOException {
 
@@ -111,6 +112,7 @@ public final class WaveFloatFileReader extends AudioFileReader {
         return fileformat;
     }
 
+    @Override
     public AudioInputStream getAudioInputStream(InputStream stream)
             throws UnsupportedAudioFileException, IOException {
 
@@ -130,6 +132,7 @@ public final class WaveFloatFileReader extends AudioFileReader {
         throw new UnsupportedAudioFileException();
     }
 
+    @Override
     public AudioFileFormat getAudioFileFormat(URL url)
             throws UnsupportedAudioFileException, IOException {
         InputStream stream = url.openStream();
@@ -142,6 +145,7 @@ public final class WaveFloatFileReader extends AudioFileReader {
         return format;
     }
 
+    @Override
     public AudioFileFormat getAudioFileFormat(File file)
             throws UnsupportedAudioFileException, IOException {
         InputStream stream = new FileInputStream(file);
@@ -154,11 +158,13 @@ public final class WaveFloatFileReader extends AudioFileReader {
         return format;
     }
 
+    @Override
     public AudioInputStream getAudioInputStream(URL url)
             throws UnsupportedAudioFileException, IOException {
         return getAudioInputStream(new BufferedInputStream(url.openStream()));
     }
 
+    @Override
     public AudioInputStream getAudioInputStream(File file)
             throws UnsupportedAudioFileException, IOException {
         return getAudioInputStream(new BufferedInputStream(new FileInputStream(

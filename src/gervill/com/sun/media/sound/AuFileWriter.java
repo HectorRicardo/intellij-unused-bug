@@ -61,6 +61,7 @@ public final class AuFileWriter extends SunFileWriter {
         super(new AudioFileFormat.Type[]{AudioFileFormat.Type.AU});
     }
 
+    @Override
     public AudioFileFormat.Type[] getAudioFileTypes(AudioInputStream stream) {
 
         AudioFileFormat.Type[] filetypes = new AudioFileFormat.Type[types.length];
@@ -82,6 +83,7 @@ public final class AuFileWriter extends SunFileWriter {
     }
 
 
+    @Override
     public int write(AudioInputStream stream, AudioFileFormat.Type fileType, OutputStream out) throws IOException {
 
         // we must know the total data length to calculate the file length
@@ -99,6 +101,7 @@ public final class AuFileWriter extends SunFileWriter {
 
 
 
+    @Override
     public int write(AudioInputStream stream, AudioFileFormat.Type fileType, File out) throws IOException {
 
         // throws IllegalArgumentException if not supported
@@ -222,7 +225,7 @@ public final class AuFileWriter extends SunFileWriter {
         //boolean bigendian      = format.isBigEndian();
         boolean bigendian      = true;                  // force bigendian
 
-        byte header[] = null;
+        byte[] header = null;
         ByteArrayInputStream headerStream = null;
         ByteArrayOutputStream baos = null;
         DataOutputStream dos = null;
@@ -302,23 +305,23 @@ public final class AuFileWriter extends SunFileWriter {
         int bytesRead = 0;
         int bytesWritten = 0;
         InputStream fileStream = getFileStream(auFileFormat, in);
-        byte buffer[] = new byte[bisBufferSize];
+        byte[] buffer = new byte[bisBufferSize];
         int maxLength = auFileFormat.getByteLength();
 
         while( (bytesRead = fileStream.read( buffer )) >= 0 ) {
             if (maxLength>0) {
                 if( bytesRead < maxLength ) {
-                    out.write( buffer, 0, (int)bytesRead );
+                    out.write( buffer, 0, bytesRead);
                     bytesWritten += bytesRead;
                     maxLength -= bytesRead;
                 } else {
-                    out.write( buffer, 0, (int)maxLength );
+                    out.write( buffer, 0, maxLength);
                     bytesWritten += maxLength;
                     maxLength = 0;
                     break;
                 }
             } else {
-                out.write( buffer, 0, (int)bytesRead );
+                out.write( buffer, 0, bytesRead);
                 bytesWritten += bytesRead;
             }
         }

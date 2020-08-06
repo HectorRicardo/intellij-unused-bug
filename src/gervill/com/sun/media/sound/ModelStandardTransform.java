@@ -73,6 +73,7 @@ public final class ModelStandardTransform implements ModelTransform {
         this.transform = transform;
     }
 
+    @Override
     public double transform(double value) {
         double s;
         double a;

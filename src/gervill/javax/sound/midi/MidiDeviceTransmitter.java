@@ -39,5 +39,5 @@ public interface MidiDeviceTransmitter extends Transmitter {
      * Obtains a MidiDevice object which is an owner of this Transmitter.
      * @return a MidiDevice object which is an owner of this Transmitter
      */
-    public MidiDevice getMidiDevice();
+    MidiDevice getMidiDevice();
 }

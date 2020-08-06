@@ -57,6 +57,7 @@ public final class StandardMidiFileReader extends MidiFileReader {
 
     private static final int bisBufferSize = 1024; // buffer size in buffered input streams
 
+    @Override
     public MidiFileFormat getMidiFileFormat(InputStream stream)
             throws InvalidMidiDataException, IOException {
         return getMidiFileFormatFromStream(stream, MidiFileFormat.UNKNOWN_LENGTH, null);
@@ -144,6 +145,7 @@ public final class StandardMidiFileReader extends MidiFileReader {
     }
 
 
+    @Override
     public MidiFileFormat getMidiFileFormat(URL url) throws InvalidMidiDataException, IOException {
         InputStream urlStream = url.openStream(); // throws IOException
         BufferedInputStream bis = new BufferedInputStream( urlStream, bisBufferSize );
@@ -157,6 +159,7 @@ public final class StandardMidiFileReader extends MidiFileReader {
     }
 
 
+    @Override
     public MidiFileFormat getMidiFileFormat(File file) throws InvalidMidiDataException, IOException {
         FileInputStream fis = new FileInputStream(file); // throws IOException
         BufferedInputStream bis = new BufferedInputStream(fis, bisBufferSize);
@@ -176,6 +179,7 @@ public final class StandardMidiFileReader extends MidiFileReader {
     }
 
 
+    @Override
     public Sequence getSequence(InputStream stream) throws InvalidMidiDataException, IOException {
         SMFParser smfParser = new SMFParser();
         MidiFileFormat format = getMidiFileFormatFromStream(stream,
@@ -203,6 +207,7 @@ public final class StandardMidiFileReader extends MidiFileReader {
 
 
 
+    @Override
     public Sequence getSequence(URL url) throws InvalidMidiDataException, IOException {
         InputStream is = url.openStream();  // throws IOException
         is = new BufferedInputStream(is, bisBufferSize);
@@ -216,6 +221,7 @@ public final class StandardMidiFileReader extends MidiFileReader {
     }
 
 
+    @Override
     public Sequence getSequence(File file) throws InvalidMidiDataException, IOException {
         InputStream is = new FileInputStream(file); // throws IOException
         is = new BufferedInputStream(is, bisBufferSize);

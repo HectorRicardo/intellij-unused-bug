@@ -139,8 +139,8 @@ public final class FFT {
 
     }
 
-    private final static void calcF2E(int fftFrameSize, double[] data, int i,
-            int nstep, double[] w) {
+    private final static void calcF2E(double[] data, int i,
+                                      int nstep, double[] w) {
         int jmax = nstep;
         for (int n = 0; n < jmax; n += 2) {
             double wr = w[i++];
@@ -181,7 +181,7 @@ public final class FFT {
             int nnstep = nstep << 1;
             if (nnstep == fftFrameSize2) {
                 // Factor-4 Decomposition not possible
-                calcF2E(fftFrameSize, data, i, nstep, w);
+                calcF2E(data, i, nstep, w);
                 return;
             }
             nstep <<= 2;
@@ -325,7 +325,7 @@ public final class FFT {
 
         }
 
-        calcF2E(fftFrameSize, data, i, nstep, w);
+        calcF2E(data, i, nstep, w);
 
     }
 
@@ -349,7 +349,7 @@ public final class FFT {
             int nnstep = nstep << 1;
             if (nnstep == fftFrameSize2) {
                 // Factor-4 Decomposition not possible
-                calcF2E(fftFrameSize, data, i, nstep, w);
+                calcF2E(data, i, nstep, w);
                 return;
             }
             nstep <<= 2;
@@ -493,7 +493,7 @@ public final class FFT {
 
         }
 
-        calcF2E(fftFrameSize, data, i, nstep, w);
+        calcF2E(data, i, nstep, w);
 
     }
 
@@ -511,7 +511,7 @@ public final class FFT {
             int nnstep = nstep << 1;
             if (nnstep == fftFrameSize2) {
                 // Factor-4 Decomposition not possible
-                calcF2E(fftFrameSize, data, i, nstep, w);
+                calcF2E(data, i, nstep, w);
                 return;
             }
             nstep <<= 2;
@@ -605,7 +605,7 @@ public final class FFT {
             int nnstep = nstep << 1;
             if (nnstep == fftFrameSize2) {
                 // Factor-4 Decomposition not possible
-                calcF2E(fftFrameSize, data, i, nstep, w);
+                calcF2E(data, i, nstep, w);
                 return;
             }
             nstep <<= 2;

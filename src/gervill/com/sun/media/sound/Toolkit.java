@@ -74,7 +74,7 @@ public final class Toolkit {
      */
     static float linearToDB(float linear) {
 
-        float dB = (float) (Math.log((double)((linear==0.0)?0.0001:linear))/Math.log(10.0) * 20.0);
+        float dB = (float) (Math.log((linear==0.0)?0.0001:linear)/Math.log(10.0) * 20.0);
         return dB;
     }
 
@@ -197,14 +197,11 @@ public final class Toolkit {
             && !format.getEncoding().equals(AudioFormat.Encoding.PCM_UNSIGNED)) {
             return false;
         }
-        if ((format.getFrameRate() <= 0)
-            || (format.getSampleRate() <= 0)
-            || (format.getSampleSizeInBits() <= 0)
-            || (format.getFrameSize() <= 0)
-            || (format.getChannels() <= 0)) {
-            return false;
-        }
-        return true;
+        return (!(format.getFrameRate() <= 0))
+                && (!(format.getSampleRate() <= 0))
+                && (format.getSampleSizeInBits() > 0)
+                && (format.getFrameSize() > 0)
+                && (format.getChannels() > 0);
     }
 
 

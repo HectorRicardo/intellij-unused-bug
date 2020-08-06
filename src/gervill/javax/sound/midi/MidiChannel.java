@@ -77,7 +77,7 @@ public interface MidiChannel {
      *
      * see #noteOff(int, int)
      */
-    public void noteOn(int noteNumber, int velocity);
+    void noteOn(int noteNumber, int velocity);
 
     /**
      * Turns the specified note off.  The key-up velocity, if not ignored, can
@@ -98,7 +98,7 @@ public interface MidiChannel {
      * see #allNotesOff
      * see #allSoundOff
      */
-    public void noteOff(int noteNumber, int velocity);
+    void noteOff(int noteNumber, int velocity);
 
     /**
      * Turns the specified note off.
@@ -107,7 +107,7 @@ public interface MidiChannel {
      *
      * see #noteOff(int, int)
      */
-    public void noteOff(int noteNumber);
+    void noteOff(int noteNumber);
 
     /**
      * Reacts to a change in the specified note's key pressure.
@@ -128,7 +128,7 @@ public interface MidiChannel {
      *
      * see #getPolyPressure(int)
      */
-    public void setPolyPressure(int noteNumber, int pressure);
+    void setPolyPressure(int noteNumber, int pressure);
 
     /**
      * Obtains the pressure with which the specified key is being depressed.
@@ -144,7 +144,7 @@ public interface MidiChannel {
      *
      * see #setPolyPressure(int, int)
      */
-    public int getPolyPressure(int noteNumber);
+    int getPolyPressure(int noteNumber);
 
     /**
      * Reacts to a change in the keyboard pressure.  Channel
@@ -166,7 +166,7 @@ public interface MidiChannel {
      * see #setPolyPressure(int, int)
      * see #getChannelPressure
      */
-    public void setChannelPressure(int pressure);
+    void setChannelPressure(int pressure);
 
     /**
      * Obtains the channel's keyboard pressure.
@@ -179,7 +179,7 @@ public interface MidiChannel {
      *
      * see #setChannelPressure(int)
      */
-    public int getChannelPressure();
+    int getChannelPressure();
 
     /**
      * Reacts to a change in the specified controller's value.  A controller
@@ -228,7 +228,7 @@ public interface MidiChannel {
      *
      * see #getController(int)
      */
-    public void controlChange(int controller, int value);
+    void controlChange(int controller, int value);
 
     /**
      * Obtains the current value of the specified controller.  The return
@@ -251,7 +251,7 @@ public interface MidiChannel {
      *
      * see #controlChange(int, int)
      */
-    public int getController(int controller);
+    int getController(int controller);
 
     /**
      * Changes a program (patch).  This selects a specific
@@ -276,7 +276,7 @@ public interface MidiChannel {
      * see #programChange(int, int)
      * see #getProgram()
      */
-    public void programChange(int program);
+    void programChange(int program);
 
     /**
      * Changes the program using bank and program (patch) numbers.
@@ -299,7 +299,7 @@ public interface MidiChannel {
      * see #programChange(int)
      * see #getProgram()
      */
-    public void programChange(int bank, int program);
+    void programChange(int bank, int program);
 
     /**
      * Obtains the current program number for this channel.
@@ -308,7 +308,7 @@ public interface MidiChannel {
      * see Synthesizer#loadInstrument
      * see #programChange(int)
      */
-    public int getProgram();
+    int getProgram();
 
     /**
      * Changes the pitch offset for all notes on this channel.
@@ -334,7 +334,7 @@ public interface MidiChannel {
      *
      * see #getPitchBend
      */
-    public void setPitchBend(int bend);
+    void setPitchBend(int bend);
 
     /**
      * Obtains the upward or downward pitch offset for this channel.
@@ -346,14 +346,14 @@ public interface MidiChannel {
      *
      * see #setPitchBend(int)
      */
-    public int getPitchBend();
+    int getPitchBend();
 
     /**
      * Resets all the implemented controllers to their default values.
      *
      * see #controlChange(int, int)
      */
-    public void resetAllControllers();
+    void resetAllControllers();
 
     /**
      * Turns off all notes that are currently sounding on this channel.
@@ -367,7 +367,7 @@ public interface MidiChannel {
      * see #allSoundOff
      * see #noteOff(int)
      */
-    public void allNotesOff();
+    void allNotesOff();
 
     /**
      * Immediately turns off all sounding notes on this channel, ignoring the
@@ -376,7 +376,7 @@ public interface MidiChannel {
      *
      * see #allNotesOff
      */
-    public void allSoundOff();
+    void allSoundOff();
 
     /**
      * Turns local control on or off.  The default is for local control
@@ -399,7 +399,7 @@ public interface MidiChannel {
      *         if local control is not supported
      *
      */
-    public boolean localControl(boolean on);
+    boolean localControl(boolean on);
 
     /**
      * Turns mono mode on or off.  In mono mode, the channel synthesizes
@@ -424,7 +424,7 @@ public interface MidiChannel {
      * see #getMono
      * see VoiceStatus
      */
-    public void setMono(boolean on);
+    void setMono(boolean on);
 
     /**
      * Obtains the current mono/poly mode.
@@ -436,7 +436,7 @@ public interface MidiChannel {
      *
      * see #setMono(boolean)
      */
-    public boolean getMono();
+    boolean getMono();
 
     /**
      * Turns omni mode on or off.  In omni mode, the channel responds
@@ -455,7 +455,7 @@ public interface MidiChannel {
      * see #getOmni
      * see VoiceStatus
      */
-    public void setOmni(boolean on);
+    void setOmni(boolean on);
 
     /**
      * Obtains the current omni mode.
@@ -467,7 +467,7 @@ public interface MidiChannel {
      *
      * see #setOmni(boolean)
      */
-    public boolean getOmni();
+    boolean getOmni();
 
     /**
      * Sets the mute state for this channel. A value of
@@ -489,7 +489,7 @@ public interface MidiChannel {
      * see #getMute
      * see #setSolo(boolean)
      */
-    public void setMute(boolean mute);
+    void setMute(boolean mute);
 
     /**
      * Obtains the current mute state for this channel.
@@ -502,7 +502,7 @@ public interface MidiChannel {
      *
      * see #setMute(boolean)
      */
-    public boolean getMute();
+    boolean getMute();
 
     /**
      * Sets the solo state for this channel.
@@ -520,7 +520,7 @@ public interface MidiChannel {
      * @param soloState new solo state for the channel
      * see #getSolo()
      */
-    public void setSolo(boolean soloState);
+    void setSolo(boolean soloState);
 
     /**
      * Obtains the current solo state for this channel.
@@ -533,5 +533,5 @@ public interface MidiChannel {
      *
      * see #setSolo(boolean)
      */
-    public boolean getSolo();
+    boolean getSolo();
 }

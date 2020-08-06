@@ -25,8 +25,6 @@
 
 package gervill.javax.sound.midi;
 
-import java.io.InputStream;
-import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -273,7 +271,7 @@ public class MidiFileFormat {
         } else {
             ret = (Map<String,Object>) (properties.clone());
         }
-        return (Map<String,Object>) Collections.unmodifiableMap(ret);
+        return Collections.unmodifiableMap(ret);
     }
 
 

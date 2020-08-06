@@ -26,7 +26,6 @@
 package gervill.javax.sound.midi;
 
 import java.util.Vector;
-import gervill.com.sun.media.sound.MidiUtils;
 
 
 /**
@@ -308,7 +307,7 @@ public class Sequence {
         synchronized(tracks) {
 
             for(int i=0; i<tracks.size(); i++ ) {
-                long temp = ((Track)tracks.elementAt(i)).ticks();
+                long temp = tracks.elementAt(i).ticks();
                 if( temp>length ) {
                     length = temp;
                 }

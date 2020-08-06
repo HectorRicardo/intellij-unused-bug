@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -100,10 +101,12 @@ public final class DLSSoundbank implements Soundbank {
             return d;
         }
 
+        @Override
         public int hashCode() {
             return (int)i1;
         }
 
+        @Override
         public boolean equals(Object obj) {
             if (!(obj instanceof DLSID)) {
                 return false;
@@ -531,7 +534,7 @@ public final class DLSSoundbank implements Soundbank {
                     chunk.read(); // Read Reserved byte
 
                     instrument.bank = bank;
-                    instrument.preset = (int) id;
+                    instrument.preset = id;
                     instrument.druminstrument = (drumins & 128) > 0;
                     //System.out.println("bank="+bank+" drumkit="+drumkit
                     //        +" id="+id);
@@ -1148,7 +1151,7 @@ public final class DLSSoundbank implements Soundbank {
             return;
         RIFFWriter chunk = writer.writeChunk(name);
         chunk.writeString(value);
-        int len = value.getBytes("ascii").length;
+        int len = value.getBytes(StandardCharsets.US_ASCII).length;
         chunk.write(0);
         len++;
         if (len % 2 != 0)
@@ -1179,18 +1182,22 @@ public final class DLSSoundbank implements Soundbank {
         return info;
     }
 
+    @Override
     public String getName() {
         return info.name;
     }
 
+    @Override
     public String getVersion() {
         return major + "." + minor;
     }
 
+    @Override
     public String getVendor() {
         return info.engineers;
     }
 
+    @Override
     public String getDescription() {
         return info.comments;
     }
@@ -1207,6 +1214,7 @@ public final class DLSSoundbank implements Soundbank {
         info.comments = s;
     }
 
+    @Override
     public SoundbankResource[] getResources() {
         SoundbankResource[] resources = new SoundbankResource[samples.size()];
         int j = 0;
@@ -1215,6 +1223,7 @@ public final class DLSSoundbank implements Soundbank {
         return resources;
     }
 
+    @Override
     public DLSInstrument[] getInstruments() {
         DLSInstrument[] inslist_array =
                 instruments.toArray(new DLSInstrument[instruments.size()]);
@@ -1226,6 +1235,7 @@ public final class DLSSoundbank implements Soundbank {
         return samples.toArray(new DLSSample[samples.size()]);
     }
 
+    @Override
     public Instrument getInstrument(Patch patch) {
         int program = patch.getProgram();
         int bank = patch.getBank();
@@ -1256,9 +1266,9 @@ public final class DLSSoundbank implements Soundbank {
 
     public void removeResource(SoundbankResource resource) {
         if (resource instanceof DLSInstrument)
-            instruments.remove((DLSInstrument) resource);
+            instruments.remove(resource);
         if (resource instanceof DLSSample)
-            samples.remove((DLSSample) resource);
+            samples.remove(resource);
     }
 
     public void addInstrument(DLSInstrument resource) {

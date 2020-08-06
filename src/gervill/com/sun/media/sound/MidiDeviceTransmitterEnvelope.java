@@ -55,20 +55,24 @@ public final class MidiDeviceTransmitterEnvelope implements MidiDeviceTransmitte
     }
 
     // Transmitter implementation
+    @Override
     public void setReceiver(Receiver receiver) {
         transmitter.setReceiver(receiver);
     }
 
+    @Override
     public Receiver getReceiver() {
         return transmitter.getReceiver();
     }
 
+    @Override
     public void close() {
         transmitter.close();
     }
 
 
     // MidiDeviceReceiver implementation
+    @Override
     public MidiDevice getMidiDevice() {
         return device;
     }

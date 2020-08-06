@@ -116,7 +116,7 @@ public interface MidiDevice extends AutoCloseable {
      *
      * @return device info
      */
-    public Info getDeviceInfo();
+    Info getDeviceInfo();
 
 
     /**
@@ -140,7 +140,7 @@ public interface MidiDevice extends AutoCloseable {
      * see #close
      * see #isOpen
      */
-    public void open() throws MidiUnavailableException;
+    void open() throws MidiUnavailableException;
 
 
     /**
@@ -154,7 +154,8 @@ public interface MidiDevice extends AutoCloseable {
      * see #open
      * see #isOpen
      */
-    public void close();
+    @Override
+    void close();
 
 
     /**
@@ -165,7 +166,7 @@ public interface MidiDevice extends AutoCloseable {
      * see #open
      * see #close
      */
-    public boolean isOpen();
+    boolean isOpen();
 
 
     /**
@@ -178,7 +179,7 @@ public interface MidiDevice extends AutoCloseable {
      * @return the current time-stamp of the device in microseconds,
      * or -1 if time-stamping is not supported by the device.
      */
-    public long getMicrosecondPosition();
+    long getMicrosecondPosition();
 
 
     /**
@@ -187,7 +188,7 @@ public interface MidiDevice extends AutoCloseable {
      * @return maximum number of MIDI IN connections,
      * or -1 if an unlimited number of connections is available.
      */
-    public int getMaxReceivers();
+    int getMaxReceivers();
 
 
     /**
@@ -196,7 +197,7 @@ public interface MidiDevice extends AutoCloseable {
      * @return maximum number of MIDI OUT connections,
      * or -1 if an unlimited number of connections is available.
      */
-    public int getMaxTransmitters();
+    int getMaxTransmitters();
 
 
     /**
@@ -218,7 +219,7 @@ public interface MidiDevice extends AutoCloseable {
      * due to resource restrictions
      * see Receiver#close()
      */
-    public Receiver getReceiver() throws MidiUnavailableException;
+    Receiver getReceiver() throws MidiUnavailableException;
 
 
     /**
@@ -255,7 +256,7 @@ public interface MidiDevice extends AutoCloseable {
      * due to resource restrictions
      * see Transmitter#close()
      */
-    public Transmitter getTransmitter() throws MidiUnavailableException;
+    Transmitter getTransmitter() throws MidiUnavailableException;
 
 
     /**
@@ -281,27 +282,27 @@ public interface MidiDevice extends AutoCloseable {
      *
      * see MidiDevice#getDeviceInfo
      */
-    public static class Info {
+    class Info {
 
         /**
          * The device's name.
          */
-        private String name;
+        private final String name;
 
         /**
          * The name of the company who provides the device.
          */
-        private String vendor;
+        private final String vendor;
 
         /**
          * A description of the device.
          */
-        private String description;
+        private final String description;
 
         /**
          * Device version.
          */
-        private String version;
+        private final String version;
 
 
         /**
@@ -329,6 +330,7 @@ public interface MidiDevice extends AutoCloseable {
          * @return <code>true</code> if this object is the same as the
          * <code>obj</code> argument; <code>false</code> otherwise
          */
+        @Override
         public final boolean equals(Object obj) {
             return super.equals(obj);
         }
@@ -337,6 +339,7 @@ public interface MidiDevice extends AutoCloseable {
         /**
          * Finalizes the hashcode method.
          */
+        @Override
         public final int hashCode() {
             return super.hashCode();
         }
@@ -384,6 +387,7 @@ public interface MidiDevice extends AutoCloseable {
 
          * @return a description of the info object
          */
+        @Override
         public final String toString() {
             return name;
         }

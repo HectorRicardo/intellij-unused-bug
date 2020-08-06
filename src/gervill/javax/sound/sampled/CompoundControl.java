@@ -45,7 +45,7 @@ public abstract class CompoundControl extends Control {
     /**
      * The set of member controls.
      */
-    private Control[] controls;
+    private final Control[] controls;
 
 
 
@@ -92,6 +92,7 @@ public abstract class CompoundControl extends Control {
      * Provides a string representation of the control
      * @return a string description
      */
+    @Override
     public String toString() {
 
         StringBuffer buf = new StringBuffer();
@@ -105,7 +106,7 @@ public abstract class CompoundControl extends Control {
             buf.append(controls[i].getType());
         }
 
-        return new String(getType() + " Control containing " + buf + " Controls.");
+        return getType() + " Control containing " + buf + " Controls.";
     }
 
 

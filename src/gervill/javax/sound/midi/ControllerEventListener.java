@@ -60,5 +60,5 @@ public interface ControllerEventListener extends EventListener {
      * see ShortMessage#getData1
      * see ShortMessage#getData2
      */
-    public void controlChange(ShortMessage event);
+    void controlChange(ShortMessage event);
 }

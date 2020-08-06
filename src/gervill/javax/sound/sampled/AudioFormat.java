@@ -403,7 +403,7 @@ public class AudioFormat {
         } else {
             ret = (Map<String,Object>) (properties.clone());
         }
-        return (Map<String,Object>) Collections.unmodifiableMap(ret);
+        return Collections.unmodifiableMap(ret);
     }
 
 
@@ -447,22 +447,19 @@ public class AudioFormat {
      *         {@code false} otherwise.
      */
     public boolean matches(AudioFormat format) {
-        if (format.getEncoding().equals(getEncoding())
+        return format.getEncoding().equals(getEncoding())
                 && (format.getChannels() == AudioSystem.NOT_SPECIFIED
-                    || format.getChannels() == getChannels())
-                && (format.getSampleRate() == (float)AudioSystem.NOT_SPECIFIED
-                    || format.getSampleRate() == getSampleRate())
+                || format.getChannels() == getChannels())
+                && (format.getSampleRate() == (float) AudioSystem.NOT_SPECIFIED
+                || format.getSampleRate() == getSampleRate())
                 && (format.getSampleSizeInBits() == AudioSystem.NOT_SPECIFIED
-                    || format.getSampleSizeInBits() == getSampleSizeInBits())
-                && (format.getFrameRate() == (float)AudioSystem.NOT_SPECIFIED
-                    || format.getFrameRate() == getFrameRate())
+                || format.getSampleSizeInBits() == getSampleSizeInBits())
+                && (format.getFrameRate() == (float) AudioSystem.NOT_SPECIFIED
+                || format.getFrameRate() == getFrameRate())
                 && (format.getFrameSize() == AudioSystem.NOT_SPECIFIED
-                    || format.getFrameSize() == getFrameSize())
+                || format.getFrameSize() == getFrameSize())
                 && (getSampleSizeInBits() <= 8
-                    || format.isBigEndian() == isBigEndian())) {
-            return true;
-        }
-        return false;
+                || format.isBigEndian() == isBigEndian());
     }
 
 
@@ -473,6 +470,7 @@ public class AudioFormat {
      *
      * @return a string that describes the format parameters
      */
+    @Override
     public String toString() {
         String sEncoding = "";
         if (getEncoding() != null) {
@@ -615,7 +613,7 @@ public class AudioFormat {
         /**
          * Encoding name.
          */
-        private String name;
+        private final String name;
 
 
         // CONSTRUCTOR
@@ -634,6 +632,7 @@ public class AudioFormat {
         /**
          * Finalizes the equals method
          */
+        @Override
         public final boolean equals(Object obj) {
             if (toString() == null) {
                 return (obj != null) && (obj.toString() == null);
@@ -647,6 +646,7 @@ public class AudioFormat {
         /**
          * Finalizes the hashCode method
          */
+        @Override
         public final int hashCode() {
             if (toString() == null) {
                 return 0;
@@ -662,6 +662,7 @@ public class AudioFormat {
          *
          * @return the encoding name
          */
+        @Override
         public final String toString() {
             return name;
         }

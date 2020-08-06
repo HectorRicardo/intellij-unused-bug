@@ -78,16 +78,17 @@ public final class SoftSynthesizer implements AudioSynthesizer,
         public SourceDataLine sourceDataLine = null;
         public volatile long silent_samples = 0;
         private int framesize = 0;
-        private WeakReference<AudioInputStream> weak_stream_link;
-        private AudioFloatConverter converter;
+        private final WeakReference<AudioInputStream> weak_stream_link;
+        private final AudioFloatConverter converter;
         private float[] silentbuffer = null;
-        private int samplesize;
+        private final int samplesize;
 
         public void setInputStream(AudioInputStream stream)
         {
             this.stream = stream;
         }
 
+        @Override
         public int available() throws IOException {
             AudioInputStream local_stream = stream;
             if(local_stream != null)
@@ -95,6 +96,7 @@ public final class SoftSynthesizer implements AudioSynthesizer,
             return 0;
         }
 
+        @Override
         public int read() throws IOException {
              byte[] b = new byte[1];
              if (read(b) == -1)
@@ -102,6 +104,7 @@ public final class SoftSynthesizer implements AudioSynthesizer,
              return b[0] & 0xFF;
         }
 
+        @Override
         public int read(byte[] b, int off, int len) throws IOException {
              AudioInputStream local_stream = stream;
              if(local_stream != null)
@@ -113,16 +116,17 @@ public final class SoftSynthesizer implements AudioSynthesizer,
                      silentbuffer = new float[flen];
                  converter.toByteArray(silentbuffer, flen, b, off);
 
-                 silent_samples += (long)((len / framesize));
+                 silent_samples += (len / framesize);
 
                  if(pusher != null)
                  if(weak_stream_link.get() == null)
                  {
                      Runnable runnable = new Runnable()
                      {
-                         SoftAudioPusher _pusher = pusher;
-                         AudioInputStream _jitter_stream = jitter_stream;
-                         SourceDataLine _sourceDataLine = sourceDataLine;
+                         final SoftAudioPusher _pusher = pusher;
+                         final AudioInputStream _jitter_stream = jitter_stream;
+                         final SourceDataLine _sourceDataLine = sourceDataLine;
+                         @Override
                          public void run()
                          {
                              _pusher.stop();
@@ -158,6 +162,7 @@ public final class SoftSynthesizer implements AudioSynthesizer,
             return new AudioInputStream(this, stream.getFormat(), AudioSystem.NOT_SPECIFIED);
         }
 
+        @Override
         public void close() throws IOException
         {
             AudioInputStream astream  = weak_stream_link.get();
@@ -178,7 +183,7 @@ public final class SoftSynthesizer implements AudioSynthesizer,
     static final String INFO_VERSION = "1.0";
     final static MidiDevice.Info info = new Info();
 
-    private static SourceDataLine testline = null;
+    private static final SourceDataLine testline = null;
 
     private static Soundbank defaultSoundBank = null;
 
@@ -233,14 +238,14 @@ public final class SoftSynthesizer implements AudioSynthesizer,
     private SoftMainMixer mainmixer;
     private SoftVoice[] voices;
 
-    private Map<String, SoftTuning> tunings
+    private final Map<String, SoftTuning> tunings
             = new HashMap<String, SoftTuning>();
-    private Map<String, SoftInstrument> inslist
+    private final Map<String, SoftInstrument> inslist
             = new HashMap<String, SoftInstrument>();
-    private Map<String, ModelInstrument> loadedlist
+    private final Map<String, ModelInstrument> loadedlist
             = new HashMap<String, ModelInstrument>();
 
-    private ArrayList<Receiver> recvslist = new ArrayList<Receiver>();
+    private final ArrayList<Receiver> recvslist = new ArrayList<Receiver>();
 
     private void getBuffers(ModelInstrument instrument,
             List<ModelByteBuffer> buffers) {
@@ -424,9 +429,7 @@ public final class SoftSynthesizer implements AudioSynthesizer,
                 return current_instrument;
             // Instrument not found fallback to MSB:0, LSB:0, program=0
             current_instrument = inslist.get(p_plaf + program + "0.0");
-            if (current_instrument != null)
-                return current_instrument;
-            return null;
+            return current_instrument;
         }
 
         // Channel 10 uses percussion instruments
@@ -446,9 +449,7 @@ public final class SoftSynthesizer implements AudioSynthesizer,
             return current_instrument;
         // Instrument not found fallback to MSB:0, LSB:0, program=0
         current_instrument = inslist.get(p_plaf + "0.0");
-        if (current_instrument != null)
-            return current_instrument;
-        return null;
+        return current_instrument;
     }
 
     int getVoiceAllocationMode() {
@@ -485,24 +486,28 @@ public final class SoftSynthesizer implements AudioSynthesizer,
         return tuning;
     }
 
+    @Override
     public long getLatency() {
         synchronized (control_mutex) {
             return latency;
         }
     }
 
+    @Override
     public AudioFormat getFormat() {
         synchronized (control_mutex) {
             return format;
         }
     }
 
+    @Override
     public int getMaxPolyphony() {
         synchronized (control_mutex) {
             return maxpoly;
         }
     }
 
+    @Override
     public MidiChannel[] getChannels() {
 
         synchronized (control_mutex) {
@@ -525,6 +530,7 @@ public final class SoftSynthesizer implements AudioSynthesizer,
         }
     }
 
+    @Override
     public VoiceStatus[] getVoiceStatus() {
         if (!isOpen()) {
             VoiceStatus[] tempVoiceStatusArray
@@ -559,6 +565,7 @@ public final class SoftSynthesizer implements AudioSynthesizer,
         }
     }
 
+    @Override
     public boolean isSoundbankSupported(Soundbank soundbank) {
         for (Instrument ins: soundbank.getInstruments())
             if (!(ins instanceof ModelInstrument))
@@ -566,6 +573,7 @@ public final class SoftSynthesizer implements AudioSynthesizer,
         return true;
     }
 
+    @Override
     public boolean loadInstrument(Instrument instrument) {
         if (instrument == null || (!(instrument instanceof ModelInstrument))) {
             throw new IllegalArgumentException("Unsupported instrument: " +
@@ -576,6 +584,7 @@ public final class SoftSynthesizer implements AudioSynthesizer,
         return loadInstruments(instruments);
     }
 
+    @Override
     public void unloadInstrument(Instrument instrument) {
         if (instrument == null || (!(instrument instanceof ModelInstrument))) {
             throw new IllegalArgumentException("Unsupported instrument: " +
@@ -596,6 +605,7 @@ public final class SoftSynthesizer implements AudioSynthesizer,
         }
     }
 
+    @Override
     public boolean remapInstrument(Instrument from, Instrument to) {
 
         if (from == null)
@@ -623,6 +633,7 @@ public final class SoftSynthesizer implements AudioSynthesizer,
         }
     }
 
+    @Override
     public Soundbank getDefaultSoundbank() {
         synchronized (SoftSynthesizer.class) {
             if (defaultSoundBank != null)
@@ -632,6 +643,7 @@ public final class SoftSynthesizer implements AudioSynthesizer,
                 new ArrayList<PrivilegedAction<InputStream>>();
 
             actions.add(new PrivilegedAction<InputStream>() {
+                @Override
                 public InputStream run() {
                     File javahome = new File(System.getProperties()
                             .getProperty("java.home"));
@@ -667,6 +679,7 @@ public final class SoftSynthesizer implements AudioSynthesizer,
             });
 
             actions.add(new PrivilegedAction<InputStream>() {
+                @Override
                 public InputStream run() {
                     if (System.getProperties().getProperty("os.name")
                             .startsWith("Linux")) {
@@ -701,6 +714,7 @@ public final class SoftSynthesizer implements AudioSynthesizer,
             });
 
             actions.add(new PrivilegedAction<InputStream>() {
+                @Override
                 public InputStream run() {
                     if (System.getProperties().getProperty("os.name")
                             .startsWith("Windows")) {
@@ -718,6 +732,7 @@ public final class SoftSynthesizer implements AudioSynthesizer,
             });
 
             actions.add(new PrivilegedAction<InputStream>() {
+                @Override
                 public InputStream run() {
                     /*
                      * Try to load saved generated soundbank
@@ -796,6 +811,7 @@ public final class SoftSynthesizer implements AudioSynthesizer,
         return defaultSoundBank;
     }
 
+    @Override
     public Instrument[] getAvailableInstruments() {
         Soundbank defsbk = getDefaultSoundbank();
         if (defsbk == null)
@@ -805,6 +821,7 @@ public final class SoftSynthesizer implements AudioSynthesizer,
         return inslist_array;
     }
 
+    @Override
     public Instrument[] getLoadedInstruments() {
         if (!isOpen())
             return new Instrument[0];
@@ -818,6 +835,7 @@ public final class SoftSynthesizer implements AudioSynthesizer,
         }
     }
 
+    @Override
     public boolean loadAllInstruments(Soundbank soundbank) {
         List<ModelInstrument> instruments = new ArrayList<ModelInstrument>();
         for (Instrument ins: soundbank.getInstruments()) {
@@ -830,6 +848,7 @@ public final class SoftSynthesizer implements AudioSynthesizer,
         return loadInstruments(instruments);
     }
 
+    @Override
     public void unloadAllInstruments(Soundbank soundbank) {
         if (soundbank == null || !isSoundbankSupported(soundbank))
             throw new IllegalArgumentException("Unsupported soundbank: " + soundbank);
@@ -844,6 +863,7 @@ public final class SoftSynthesizer implements AudioSynthesizer,
         }
     }
 
+    @Override
     public boolean loadInstruments(Soundbank soundbank, Patch[] patchList) {
         List<ModelInstrument> instruments = new ArrayList<ModelInstrument>();
         for (Patch patch: patchList) {
@@ -857,6 +877,7 @@ public final class SoftSynthesizer implements AudioSynthesizer,
         return loadInstruments(instruments);
     }
 
+    @Override
     public void unloadInstruments(Soundbank soundbank, Patch[] patchList) {
         if (soundbank == null || !isSoundbankSupported(soundbank))
             throw new IllegalArgumentException("Unsupported soundbank: " + soundbank);
@@ -872,6 +893,7 @@ public final class SoftSynthesizer implements AudioSynthesizer,
         }
     }
 
+    @Override
     public MidiDevice.Info getDeviceInfo() {
         return info;
     }
@@ -899,6 +921,7 @@ public final class SoftSynthesizer implements AudioSynthesizer,
                 });
     }
 
+    @Override
     public AudioSynthesizerPropertyInfo[] getPropertyInfo(Map<String, Object> info) {
         List<AudioSynthesizerPropertyInfo> list =
                 new ArrayList<AudioSynthesizerPropertyInfo>();
@@ -938,19 +961,19 @@ public final class SoftSynthesizer implements AudioSynthesizer,
         item.description = "Maximum polyphony";
         list.add(item);
 
-        item = new AudioSynthesizerPropertyInfo("reverb", o?reverb_on:true);
+        item = new AudioSynthesizerPropertyInfo("reverb", !o || reverb_on);
         item.description = "Turn reverb effect on or off";
         list.add(item);
 
-        item = new AudioSynthesizerPropertyInfo("chorus", o?chorus_on:true);
+        item = new AudioSynthesizerPropertyInfo("chorus", !o || chorus_on);
         item.description = "Turn chorus effect on or off";
         list.add(item);
 
-        item = new AudioSynthesizerPropertyInfo("auto gain control", o?agc_on:true);
+        item = new AudioSynthesizerPropertyInfo("auto gain control", !o || agc_on);
         item.description = "Turn auto gain control on or off";
         list.add(item);
 
-        item = new AudioSynthesizerPropertyInfo("large mode", o?largemode:false);
+        item = new AudioSynthesizerPropertyInfo("large mode", o && largemode);
         item.description = "Turn large mode on or off.";
         list.add(item);
 
@@ -958,15 +981,15 @@ public final class SoftSynthesizer implements AudioSynthesizer,
         item.description = "Number of midi channels.";
         list.add(item);
 
-        item = new AudioSynthesizerPropertyInfo("jitter correction", o?jitter_correction:true);
+        item = new AudioSynthesizerPropertyInfo("jitter correction", !o || jitter_correction);
         item.description = "Turn jitter correction on or off.";
         list.add(item);
 
-        item = new AudioSynthesizerPropertyInfo("light reverb", o?reverb_light:true);
+        item = new AudioSynthesizerPropertyInfo("light reverb", !o || reverb_light);
         item.description = "Turn light reverb mode on or off";
         list.add(item);
 
-        item = new AudioSynthesizerPropertyInfo("load default soundbank", o?load_default_soundbank:true);
+        item = new AudioSynthesizerPropertyInfo("load default soundbank", !o || load_default_soundbank);
         item.description = "Enabled/disable loading default soundbank";
         list.add(item);
 
@@ -1056,6 +1079,7 @@ public final class SoftSynthesizer implements AudioSynthesizer,
         return items;
     }
 
+    @Override
     public void open() throws MidiUnavailableException {
         if (isOpen()) {
             synchronized (control_mutex) {
@@ -1066,6 +1090,7 @@ public final class SoftSynthesizer implements AudioSynthesizer,
         open(null, null);
     }
 
+    @Override
     public void open(SourceDataLine line, Map<String, Object> info) throws MidiUnavailableException {
         if (isOpen()) {
             synchronized (control_mutex) {
@@ -1160,8 +1185,9 @@ public final class SoftSynthesizer implements AudioSynthesizer,
         }
     }
 
+    @Override
     public AudioInputStream openStream(AudioFormat targetFormat,
-            Map<String, Object> info) throws MidiUnavailableException {
+                                       Map<String, Object> info) throws MidiUnavailableException {
 
         if (isOpen())
             throw new MidiUnavailableException("Synthesizer is already open");
@@ -1241,6 +1267,7 @@ public final class SoftSynthesizer implements AudioSynthesizer,
         }
     }
 
+    @Override
     public void close() {
 
         if (!isOpen())
@@ -1299,12 +1326,14 @@ public final class SoftSynthesizer implements AudioSynthesizer,
         }
     }
 
+    @Override
     public boolean isOpen() {
         synchronized (control_mutex) {
             return open;
         }
     }
 
+    @Override
     public long getMicrosecondPosition() {
 
         if (!isOpen())
@@ -1315,14 +1344,17 @@ public final class SoftSynthesizer implements AudioSynthesizer,
         }
     }
 
+    @Override
     public int getMaxReceivers() {
         return -1;
     }
 
+    @Override
     public int getMaxTransmitters() {
         return 0;
     }
 
+    @Override
     public Receiver getReceiver() throws MidiUnavailableException {
 
         synchronized (control_mutex) {
@@ -1333,6 +1365,7 @@ public final class SoftSynthesizer implements AudioSynthesizer,
         }
     }
 
+    @Override
     public List<Receiver> getReceivers() {
 
         synchronized (control_mutex) {
@@ -1342,16 +1375,19 @@ public final class SoftSynthesizer implements AudioSynthesizer,
         }
     }
 
+    @Override
     public Transmitter getTransmitter() throws MidiUnavailableException {
 
         throw new MidiUnavailableException("No transmitter available");
     }
 
+    @Override
     public List<Transmitter> getTransmitters() {
 
         return new ArrayList<Transmitter>();
     }
 
+    @Override
     public Receiver getReceiverReferenceCounting()
             throws MidiUnavailableException {
 
@@ -1365,6 +1401,7 @@ public final class SoftSynthesizer implements AudioSynthesizer,
         return getReceiver();
     }
 
+    @Override
     public Transmitter getTransmitterReferenceCounting()
             throws MidiUnavailableException {
 

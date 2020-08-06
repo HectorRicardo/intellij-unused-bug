@@ -65,7 +65,7 @@ public final class JavaSoundAudioClip implements AudioClip, MetaEventListener, L
     private long lastPlayCall = 0;
     private static final int MINIMUM_PLAY_DELAY = 30;
 
-    private byte loadedAudio[] = null;
+    private byte[] loadedAudio = null;
     private int loadedAudioByteLength = 0;
     private AudioFormat loadedAudioFormat = null;
 
@@ -127,11 +127,13 @@ public final class JavaSoundAudioClip implements AudioClip, MetaEventListener, L
     }
 
 
+    @Override
     public synchronized void play() {
         startImpl(false);
     }
 
 
+    @Override
     public synchronized void loop() {
         startImpl(true);
     }
@@ -207,6 +209,7 @@ public final class JavaSoundAudioClip implements AudioClip, MetaEventListener, L
         }
     }
 
+    @Override
     public synchronized void stop() {
 
         if (DEBUG || Printer.debug)Printer.debug("JavaSoundAudioClip->stop()");
@@ -250,13 +253,15 @@ public final class JavaSoundAudioClip implements AudioClip, MetaEventListener, L
 
     // Event handlers (for debugging)
 
+    @Override
     public synchronized void update(LineEvent event) {
         if (DEBUG || Printer.debug) Printer.debug("line event received: "+event);
     }
 
     // handle MIDI track end meta events for looping
 
-    public synchronized void meta( MetaMessage message ) {
+    @Override
+    public synchronized void meta(MetaMessage message ) {
 
         if (DEBUG || Printer.debug)Printer.debug("META EVENT RECEIVED!!!!! ");
 
@@ -272,11 +277,13 @@ public final class JavaSoundAudioClip implements AudioClip, MetaEventListener, L
     }
 
 
+    @Override
     public String toString() {
         return getClass().toString();
     }
 
 
+    @Override
     protected void finalize() {
 
         if (clip != null) {
@@ -355,7 +362,7 @@ public final class JavaSoundAudioClip implements AudioClip, MetaEventListener, L
     private void readStream(AudioInputStream as) throws IOException {
 
         DirectBAOS baos = new DirectBAOS();
-        byte buffer[] = new byte[16384];
+        byte[] buffer = new byte[16384];
         int bytesRead = 0;
         int totalBytesRead = 0;
 

@@ -75,6 +75,7 @@ abstract class SunFileReader extends AudioFileReader {
      * see InputStream#markSupported
      * see InputStream#mark
      */
+    @Override
     abstract public AudioFileFormat getAudioFileFormat(InputStream stream) throws UnsupportedAudioFileException, IOException;
 
 
@@ -88,6 +89,7 @@ abstract class SunFileReader extends AudioFileReader {
      * file data recognized by the system
      * throws IOException if an I/O exception occurs
      */
+    @Override
     abstract public AudioFileFormat getAudioFileFormat(URL url) throws UnsupportedAudioFileException, IOException;
 
 
@@ -101,6 +103,7 @@ abstract class SunFileReader extends AudioFileReader {
      * file data recognized by the system
      * throws IOException if an I/O exception occurs
      */
+    @Override
     abstract public AudioFileFormat getAudioFileFormat(File file) throws UnsupportedAudioFileException, IOException;
 
 
@@ -123,6 +126,7 @@ abstract class SunFileReader extends AudioFileReader {
      * see InputStream#markSupported
      * see InputStream#mark
      */
+    @Override
     abstract public AudioInputStream getAudioInputStream(InputStream stream) throws UnsupportedAudioFileException, IOException;
 
 
@@ -137,6 +141,7 @@ abstract class SunFileReader extends AudioFileReader {
      * file data recognized by the system
      * throws IOException if an I/O exception occurs
      */
+    @Override
     abstract public AudioInputStream getAudioInputStream(URL url) throws UnsupportedAudioFileException, IOException;
 
 
@@ -151,6 +156,7 @@ abstract class SunFileReader extends AudioFileReader {
      * file data recognized by the system
      * throws IOException if an I/O exception occurs
      */
+    @Override
     abstract public AudioInputStream getAudioInputStream(File file) throws UnsupportedAudioFileException, IOException;
 
 

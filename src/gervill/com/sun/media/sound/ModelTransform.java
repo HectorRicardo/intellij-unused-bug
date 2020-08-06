@@ -31,5 +31,5 @@ package gervill.com.sun.media.sound;
  */
 public interface ModelTransform {
 
-    abstract public double transform(double value);
+    double transform(double value);
 }

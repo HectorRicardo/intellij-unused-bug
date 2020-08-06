@@ -66,6 +66,7 @@ public final class JARSoundbankReader extends SoundbankReader {
         return ok;
     }
 
+    @Override
     public Soundbank getSoundbank(URL url)
             throws InvalidMidiDataException, IOException {
         if (!isZIP(url))
@@ -110,11 +111,13 @@ public final class JARSoundbankReader extends SoundbankReader {
         return sbk;
     }
 
+    @Override
     public Soundbank getSoundbank(InputStream stream)
             throws InvalidMidiDataException, IOException {
         return null;
     }
 
+    @Override
     public Soundbank getSoundbank(File file)
             throws InvalidMidiDataException, IOException {
         return getSoundbank(file.toURI().toURL());

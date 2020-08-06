@@ -52,6 +52,7 @@ final class MidiInDevice extends AbstractMidiDevice implements Runnable {
 
     // $$kk: 06.24.99: i have this both opening and starting the midi in device.
     // may want to separate these??
+    @Override
     protected synchronized void implOpen() throws MidiUnavailableException {
         if (Printer.trace) Printer.trace("> MidiInDevice: implOpen()");
 
@@ -78,6 +79,7 @@ final class MidiInDevice extends AbstractMidiDevice implements Runnable {
 
     // $$kk: 06.24.99: i have this both stopping and closing the midi in device.
     // may want to separate these??
+    @Override
     protected synchronized void implClose() {
         if (Printer.trace) Printer.trace("> MidiInDevice: implClose()");
         long oldId = id;
@@ -99,6 +101,7 @@ final class MidiInDevice extends AbstractMidiDevice implements Runnable {
     }
 
 
+    @Override
     public long getMicrosecondPosition() {
         long timestamp = -1;
         if (isOpen()) {
@@ -111,11 +114,13 @@ final class MidiInDevice extends AbstractMidiDevice implements Runnable {
     // OVERRIDES OF ABSTRACT MIDI DEVICE METHODS
 
 
+    @Override
     protected boolean hasTransmitters() {
         return true;
     }
 
 
+    @Override
     protected Transmitter createTransmitter() {
         return new MidiInTransmitter();
     }
@@ -132,6 +137,7 @@ final class MidiInDevice extends AbstractMidiDevice implements Runnable {
 
     // RUNNABLE METHOD
 
+    @Override
     public void run() {
         // while the device is started, keep trying to get messages.
         // this thread returns from native code whenever stop() or close() is called

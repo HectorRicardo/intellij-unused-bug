@@ -134,6 +134,7 @@ public final class ModelIdentifier {
         this.variable = variable;
     }
 
+    @Override
     public int hashCode() {
         int hashcode = instance;
         if(object != null) hashcode |= object.hashCode();
@@ -141,6 +142,7 @@ public final class ModelIdentifier {
         return  hashcode;
     }
 
+    @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof ModelIdentifier))
             return false;
@@ -154,11 +156,10 @@ public final class ModelIdentifier {
             return false;
         if (!(object == null || object.equals(mobj.object)))
             return false;
-        if (!(variable == null || variable.equals(mobj.variable)))
-            return false;
-        return true;
+        return variable == null || variable.equals(mobj.variable);
     }
 
+    @Override
     public String toString() {
         if (variable == null) {
             return object + "[" + instance + "]";

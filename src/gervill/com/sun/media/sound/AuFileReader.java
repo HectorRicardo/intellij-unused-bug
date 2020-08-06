@@ -69,6 +69,7 @@ public final class AuFileReader extends SunFileReader {
      * see InputStream#markSupported
      * see InputStream#mark
      */
+    @Override
     public AudioFileFormat getAudioFileFormat(InputStream stream) throws UnsupportedAudioFileException, IOException {
 
         AudioFormat format = null;
@@ -207,6 +208,7 @@ public final class AuFileReader extends SunFileReader {
      * file data recognized by the system
      * throws IOException if an I/O exception occurs
      */
+    @Override
     public AudioFileFormat getAudioFileFormat(URL url) throws UnsupportedAudioFileException, IOException {
 
         InputStream                             urlStream = null;
@@ -238,6 +240,7 @@ public final class AuFileReader extends SunFileReader {
      * file data recognized by the system
      * throws IOException if an I/O exception occurs
      */
+    @Override
     public AudioFileFormat getAudioFileFormat(File file) throws UnsupportedAudioFileException, IOException {
 
         FileInputStream                 fis = null;
@@ -277,6 +280,7 @@ public final class AuFileReader extends SunFileReader {
      * see InputStream#markSupported
      * see InputStream#mark
      */
+    @Override
     public AudioInputStream getAudioInputStream(InputStream stream) throws UnsupportedAudioFileException, IOException {
 
         DataInputStream dis = null;
@@ -318,6 +322,7 @@ public final class AuFileReader extends SunFileReader {
      * file data recognized by the system
      * throws IOException if an I/O exception occurs
      */
+    @Override
     public AudioInputStream getAudioInputStream(URL url) throws UnsupportedAudioFileException, IOException {
 
         InputStream                             urlStream = null;
@@ -328,7 +333,7 @@ public final class AuFileReader extends SunFileReader {
         AudioInputStream result = null;
         try {
             bis = new BufferedInputStream( urlStream, bisBufferSize );
-            result = getAudioInputStream( (InputStream)bis );
+            result = getAudioInputStream(bis);
         } finally {
             if (result == null) {
                 urlStream.close();
@@ -349,6 +354,7 @@ public final class AuFileReader extends SunFileReader {
      * file data recognized by the system
      * throws IOException if an I/O exception occurs
      */
+    @Override
     public AudioInputStream getAudioInputStream(File file) throws UnsupportedAudioFileException, IOException {
 
         FileInputStream                 fis = null;
@@ -360,7 +366,7 @@ public final class AuFileReader extends SunFileReader {
         // part of fix for 4325421
         try {
             bis = new BufferedInputStream( fis, bisBufferSize );
-            result = getAudioInputStream( (InputStream)bis );
+            result = getAudioInputStream(bis);
         } finally {
             if (result == null) {
                 fis.close();

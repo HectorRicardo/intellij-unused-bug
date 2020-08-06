@@ -61,6 +61,7 @@ abstract class SunCodec extends FormatConversionProvider {
 
     /**
      */
+    @Override
     public final AudioFormat.Encoding[] getSourceEncodings() {
         AudioFormat.Encoding[] encodings = new AudioFormat.Encoding[inputEncodings.length];
         System.arraycopy(inputEncodings, 0, encodings, 0, inputEncodings.length);
@@ -68,6 +69,7 @@ abstract class SunCodec extends FormatConversionProvider {
     }
     /**
      */
+    @Override
     public final AudioFormat.Encoding[] getTargetEncodings() {
         AudioFormat.Encoding[] encodings = new AudioFormat.Encoding[outputEncodings.length];
         System.arraycopy(outputEncodings, 0, encodings, 0, outputEncodings.length);
@@ -76,19 +78,23 @@ abstract class SunCodec extends FormatConversionProvider {
 
     /**
      */
+    @Override
     public abstract AudioFormat.Encoding[] getTargetEncodings(AudioFormat sourceFormat);
 
 
     /**
      */
+    @Override
     public abstract AudioFormat[] getTargetFormats(AudioFormat.Encoding targetEncoding, AudioFormat sourceFormat);
 
 
     /**
      */
+    @Override
     public abstract AudioInputStream getAudioInputStream(AudioFormat.Encoding targetEncoding, AudioInputStream sourceStream);
     /**
      */
+    @Override
     public abstract AudioInputStream getAudioInputStream(AudioFormat targetFormat, AudioInputStream sourceStream);
 
 

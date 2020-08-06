@@ -39,10 +39,12 @@ public final class SoftProvider extends MidiDeviceProvider {
     static final Info softinfo = SoftSynthesizer.info;
     private static final Info[] softinfos = {softinfo};
 
+    @Override
     public MidiDevice.Info[] getDeviceInfo() {
         return Arrays.copyOf(softinfos, softinfos.length);
     }
 
+    @Override
     public MidiDevice getDevice(MidiDevice.Info info) {
         if (info == softinfo) {
             return new SoftSynthesizer();

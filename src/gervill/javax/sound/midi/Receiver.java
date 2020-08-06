@@ -50,7 +50,7 @@ public interface Receiver extends AutoCloseable {
      * @param timeStamp the time-stamp for the message, in microseconds.
      * throws IllegalStateException if the receiver is closed
      */
-    public void send(MidiMessage message, long timeStamp);
+    void send(MidiMessage message, long timeStamp);
 
     /**
      * Indicates that the application has finished using the receiver, and
@@ -70,5 +70,6 @@ public interface Receiver extends AutoCloseable {
      *
      * see gervill.javax.sound.midi.MidiSystem#getReceiver
      */
-    public void close();
+    @Override
+    void close();
 }

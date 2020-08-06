@@ -93,6 +93,7 @@ public final class PortMixerProvider extends MixerProvider {
         }
     }
 
+    @Override
     public Mixer.Info[] getMixerInfo() {
         synchronized (PortMixerProvider.class) {
             Mixer.Info[] localArray = new Mixer.Info[infos.length];
@@ -102,6 +103,7 @@ public final class PortMixerProvider extends MixerProvider {
     }
 
 
+    @Override
     public Mixer getMixer(Mixer.Info info) {
         synchronized (PortMixerProvider.class) {
             for (int i = 0; i < infos.length; i++) {

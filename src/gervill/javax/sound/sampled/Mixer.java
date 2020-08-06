@@ -62,7 +62,7 @@ public interface Mixer extends Line {
      * @return a mixer info object that describes this mixer
      * see Mixer.Info
      */
-    public Info getMixerInfo();
+    Info getMixerInfo();
 
 
     /**
@@ -73,7 +73,7 @@ public interface Mixer extends Line {
      * for this mixer.  If no source lines are supported,
      * an array of length 0 is returned.
      */
-    public Line.Info[] getSourceLineInfo();
+    Line.Info[] getSourceLineInfo();
 
     /**
      * Obtains information about the set of target lines supported
@@ -83,7 +83,7 @@ public interface Mixer extends Line {
      * for this mixer.  If no target lines are supported,
      * an array of length 0 is returned.
      */
-    public Line.Info[] getTargetLineInfo();
+    Line.Info[] getTargetLineInfo();
 
 
     /**
@@ -96,7 +96,7 @@ public interface Mixer extends Line {
      * the type requested.  If no matching source lines are supported, an array of length 0
      * is returned.
      */
-    public Line.Info[] getSourceLineInfo(Line.Info info);
+    Line.Info[] getSourceLineInfo(Line.Info info);
 
 
     /**
@@ -109,7 +109,7 @@ public interface Mixer extends Line {
      * the type requested.  If no matching target lines are supported, an array of length 0
      * is returned.
      */
-    public Line.Info[] getTargetLineInfo(Line.Info info);
+    Line.Info[] getTargetLineInfo(Line.Info info);
 
 
     /**
@@ -120,7 +120,7 @@ public interface Mixer extends Line {
      * @return <code>true</code> if at least one matching line is
      * supported, <code>false</code> otherwise
      */
-    public boolean isLineSupported(Line.Info info);
+    boolean isLineSupported(Line.Info info);
 
     /**
      * Obtains a line that is available for use and that matches the description
@@ -142,7 +142,7 @@ public interface Mixer extends Line {
      * throws SecurityException if a matching line
      * is not available due to security restrictions
      */
-    public Line getLine(Line.Info info) throws LineUnavailableException;
+    Line getLine(Line.Info info) throws LineUnavailableException;
 
     //$$fb 2002-04-12: fix for 4667258: behavior of Mixer.getMaxLines(Line.Info) method doesn't match the spec
     /**
@@ -165,7 +165,7 @@ public interface Mixer extends Line {
      * the number of supported instances is queried
      * @return the maximum number of matching lines supported, or <code>AudioSystem.NOT_SPECIFIED</code>
      */
-    public int getMaxLines(Line.Info info);
+    int getMaxLines(Line.Info info);
 
 
     /**
@@ -177,7 +177,7 @@ public interface Mixer extends Line {
      * throws SecurityException if the matching lines
      * are not available due to security restrictions
      */
-    public Line[] getSourceLines();
+    Line[] getSourceLines();
 
     /**
      * Obtains the set of all target lines currently open from this mixer.
@@ -188,7 +188,7 @@ public interface Mixer extends Line {
      * throws SecurityException if the matching lines
      * are not available due to security restrictions
      */
-    public Line[] getTargetLines();
+    Line[] getTargetLines();
 
     /**
      * Synchronizes two or more lines.  Any subsequent command that starts or stops
@@ -196,18 +196,8 @@ public interface Mixer extends Line {
      * same effect on the other lines in the group, so that they start or stop playing or
      * capturing data simultaneously.
      *
-     * @param lines the lines that should be synchronized
-     * @param maintainSync <code>true</code> if the synchronization
-     * must be precisely maintained (i.e., the synchronization must be sample-accurate)
-     * at all times during operation of the lines , or <code>false</code>
-     * if precise synchronization is required only during start and stop operations
-     *
-     * throws IllegalArgumentException if the lines cannot be synchronized.
-     * This may occur if the lines are of different types or have different
-     * formats for which this mixer does not support synchronization, or if
-     * all lines specified do not belong to this mixer.
      */
-    public void synchronize(Line[] lines, boolean maintainSync);
+    void synchronize();
 
     /**
      * Releases synchronization for the specified lines.  The array must
@@ -215,29 +205,17 @@ public interface Mixer extends Line {
      * established; otherwise an exception may be thrown.  However, <code>null</code>
      * may be specified, in which case all currently synchronized lines that belong
      * to this mixer are unsynchronized.
-     * @param lines the synchronized lines for which synchronization should be
-     * released, or <code>null</code> for all this mixer's synchronized lines
-     *
-     * throws IllegalArgumentException if the lines cannot be unsynchronized.
-     * This may occur if the argument specified does not exactly match a set
-     * of lines for which synchronization has already been established.
      */
-    public void unsynchronize(Line[] lines);
+    void unsynchronize();
 
 
     /**
      * Reports whether this mixer supports synchronization of the specified set of lines.
      *
-     * @param lines the set of lines for which synchronization support is queried
-     * @param maintainSync <code>true</code> if the synchronization
-     * must be precisely maintained (i.e., the synchronization must be sample-accurate)
-     * at all times during operation of the lines , or <code>false</code>
-     * if precise synchronization is required only during start and stop operations
-     *
      * @return <code>true</code> if the lines can be synchronized, <code>false</code>
      * otherwise
      */
-    public boolean isSynchronizationSupported(Line[] lines, boolean maintainSync);
+    boolean isSynchronizationSupported();
 
 
     /**
@@ -250,7 +228,7 @@ public interface Mixer extends Line {
      * @author Kara Kytle
      * @since 1.3
      */
-    public static class Info {
+    class Info {
 
         /**
          * Mixer name.
@@ -298,6 +276,7 @@ public interface Mixer extends Line {
          * @return <code>true</code> if this info object is the same as the
          * <code>obj</code> argument; <code>false</code> otherwise
          */
+        @Override
         public final boolean equals(Object obj) {
             return super.equals(obj);
         }
@@ -307,6 +286,7 @@ public interface Mixer extends Line {
          *
          * @return the hashcode for this object
          */
+        @Override
         public final int hashCode() {
             return super.hashCode();
         }
@@ -347,6 +327,7 @@ public interface Mixer extends Line {
          * Provides a string representation of the mixer info.
          * @return a string describing the info object
          */
+        @Override
         public final String toString() {
             return (name + ", version " + version);
         }

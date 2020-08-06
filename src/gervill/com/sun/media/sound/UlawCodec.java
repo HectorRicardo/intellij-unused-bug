@@ -49,7 +49,7 @@ public final class UlawCodec extends SunCodec {
     private static final AudioFormat.Encoding[] ulawEncodings = {AudioFormat.Encoding.ULAW,
                                                                  AudioFormat.Encoding.PCM_SIGNED};
 
-    private static final short seg_end [] = {0xFF, 0x1FF, 0x3FF,
+    private static final short[] seg_end = {0xFF, 0x1FF, 0x3FF,
                                              0x7FF, 0xFFF, 0x1FFF, 0x3FFF, 0x7FFF};
 
     /**
@@ -80,10 +80,11 @@ public final class UlawCodec extends SunCodec {
 
     /**
      */
+    @Override
     public AudioFormat.Encoding[] getTargetEncodings(AudioFormat sourceFormat){
         if( AudioFormat.Encoding.PCM_SIGNED.equals(sourceFormat.getEncoding()) ) {
             if( sourceFormat.getSampleSizeInBits() == 16 ) {
-                AudioFormat.Encoding enc[] = new AudioFormat.Encoding[1];
+                AudioFormat.Encoding[] enc = new AudioFormat.Encoding[1];
                 enc[0] = AudioFormat.Encoding.ULAW;
                 return enc;
             } else {
@@ -91,7 +92,7 @@ public final class UlawCodec extends SunCodec {
             }
         } else if (AudioFormat.Encoding.ULAW.equals(sourceFormat.getEncoding())) {
             if (sourceFormat.getSampleSizeInBits() == 8) {
-                AudioFormat.Encoding enc[] = new AudioFormat.Encoding[1];
+                AudioFormat.Encoding[] enc = new AudioFormat.Encoding[1];
                 enc[0] = AudioFormat.Encoding.PCM_SIGNED;
                 return enc;
             } else {
@@ -105,6 +106,7 @@ public final class UlawCodec extends SunCodec {
 
     /**
      */
+    @Override
     public AudioFormat[] getTargetFormats(AudioFormat.Encoding targetEncoding, AudioFormat sourceFormat){
         if( (AudioFormat.Encoding.PCM_SIGNED.equals(targetEncoding)
              && AudioFormat.Encoding.ULAW.equals(sourceFormat.getEncoding()))
@@ -119,6 +121,7 @@ public final class UlawCodec extends SunCodec {
 
     /**
      */
+    @Override
     public AudioInputStream getAudioInputStream(AudioFormat.Encoding targetEncoding, AudioInputStream sourceStream){
         AudioFormat sourceFormat = sourceStream.getFormat();
         AudioFormat.Encoding sourceEncoding = sourceFormat.getEncoding();
@@ -159,6 +162,7 @@ public final class UlawCodec extends SunCodec {
     /**
      * use old code...
      */
+    @Override
     public AudioInputStream getAudioInputStream(AudioFormat targetFormat, AudioInputStream sourceStream){
         return getConvertedStream(targetFormat, sourceStream);
     }
@@ -183,7 +187,7 @@ public final class UlawCodec extends SunCodec {
         if( inputFormat.matches(outputFormat) ) {
             cs = stream;
         } else {
-            cs = (AudioInputStream) (new UlawCodecStream(stream, outputFormat));
+            cs = new UlawCodecStream(stream, outputFormat);
         }
         return cs;
     }
@@ -244,7 +248,7 @@ public final class UlawCodec extends SunCodec {
     class UlawCodecStream extends AudioInputStream {
 
         private static final int tempBufferSize = 64;
-        private byte tempBuffer [] = null;
+        private byte[] tempBuffer = null;
 
         /**
          * True to encode to u-law, false to decode to linear
@@ -254,8 +258,8 @@ public final class UlawCodec extends SunCodec {
         AudioFormat encodeFormat;
         AudioFormat decodeFormat;
 
-        byte tabByte1[] = null;
-        byte tabByte2[] = null;
+        byte[] tabByte1 = null;
+        byte[] tabByte2 = null;
         int highByte = 0;
         int lowByte  = 1;
 
@@ -301,7 +305,7 @@ public final class UlawCodec extends SunCodec {
 
             // set the AudioInputStream length in frames if we know it
             if (stream instanceof AudioInputStream) {
-                frameLength = ((AudioInputStream)stream).getFrameLength();
+                frameLength = stream.getFrameLength();
             }
             // set framePos to zero
             framePos = 0;
@@ -316,7 +320,7 @@ public final class UlawCodec extends SunCodec {
          * $$jb 2/23/99
          * Used to determine segment number in uLaw encoding
          */
-        private short search(short val, short table[], short size) {
+        private short search(short val, short[] table, short size) {
             for(short i = 0; i < size; i++) {
                 if (val <= table[i]) { return i; }
             }
@@ -327,6 +331,7 @@ public final class UlawCodec extends SunCodec {
          * Note that this won't actually read anything; must read in
          * two-byte units.
          */
+        @Override
         public int read() throws IOException {
             byte[] b = new byte[1];
             if (read(b, 0, b.length) == 1) {
@@ -335,10 +340,12 @@ public final class UlawCodec extends SunCodec {
             return -1;
         }
 
+        @Override
         public int read(byte[] b) throws IOException {
             return read(b, 0, b.length);
         }
 
+        @Override
         public int read(byte[] b, int off, int len) throws IOException {
             // don't read fractional frames
             if( len%frameSize != 0 ) {
@@ -406,8 +413,8 @@ public final class UlawCodec extends SunCodec {
                     return readCount;
                 }
                 for (i = off; i < (off + (readCount*2)); i+=2) {
-                    b[i]        = (byte)tabByte1[b[readOffset] & 0xFF];
-                    b[i+1]      = (byte)tabByte2[b[readOffset] & 0xFF];
+                    b[i]        = tabByte1[b[readOffset] & 0xFF];
+                    b[i+1]      = tabByte2[b[readOffset] & 0xFF];
                     readOffset++;
                 }
                 return (i - off);

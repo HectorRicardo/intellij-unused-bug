@@ -92,6 +92,7 @@ public final class DirectAudioDeviceProvider extends MixerProvider {
         }
     }
 
+    @Override
     public Mixer.Info[] getMixerInfo() {
         synchronized (DirectAudioDeviceProvider.class) {
             Mixer.Info[] localArray = new Mixer.Info[infos.length];
@@ -101,6 +102,7 @@ public final class DirectAudioDeviceProvider extends MixerProvider {
     }
 
 
+    @Override
     public Mixer getMixer(Mixer.Info info) {
         synchronized (DirectAudioDeviceProvider.class) {
             // if the default device is asked, we provide the mixer

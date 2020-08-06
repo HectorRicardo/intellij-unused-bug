@@ -62,6 +62,7 @@ public final class AiffFileWriter extends SunFileWriter {
 
     // METHODS TO IMPLEMENT AudioFileWriter
 
+    @Override
     public AudioFileFormat.Type[] getAudioFileTypes(AudioInputStream stream) {
 
         AudioFileFormat.Type[] filetypes = new AudioFileFormat.Type[types.length];
@@ -83,6 +84,7 @@ public final class AiffFileWriter extends SunFileWriter {
     }
 
 
+    @Override
     public int write(AudioInputStream stream, AudioFileFormat.Type fileType, OutputStream out) throws IOException {
 
         //$$fb the following check must come first ! Otherwise
@@ -102,6 +104,7 @@ public final class AiffFileWriter extends SunFileWriter {
     }
 
 
+    @Override
     public int write(AudioInputStream stream, AudioFileFormat.Type fileType, File out) throws IOException {
 
         // throws IllegalArgumentException if not supported
@@ -233,24 +236,24 @@ public final class AiffFileWriter extends SunFileWriter {
         int bytesRead = 0;
         int bytesWritten = 0;
         InputStream fileStream = getFileStream(aiffFileFormat, in);
-        byte buffer[] = new byte[bisBufferSize];
+        byte[] buffer = new byte[bisBufferSize];
         int maxLength = aiffFileFormat.getByteLength();
 
         while( (bytesRead = fileStream.read( buffer )) >= 0 ) {
             if (maxLength>0) {
                 if( bytesRead < maxLength ) {
-                    out.write( buffer, 0, (int)bytesRead );
+                    out.write( buffer, 0, bytesRead);
                     bytesWritten += bytesRead;
                     maxLength -= bytesRead;
                 } else {
-                    out.write( buffer, 0, (int)maxLength );
+                    out.write( buffer, 0, maxLength);
                     bytesWritten += maxLength;
                     maxLength = 0;
                     break;
                 }
 
             } else {
-                out.write( buffer, 0, (int)bytesRead );
+                out.write( buffer, 0, bytesRead);
                 bytesWritten += bytesRead;
             }
         }
@@ -292,7 +295,7 @@ public final class AiffFileWriter extends SunFileWriter {
         float sampleFramesPerSecond = format.getSampleRate();
         int compCode = AiffFileFormat.AIFC_PCM;
 
-        byte header[] = null;
+        byte[] header = null;
         ByteArrayInputStream headerStream = null;
         ByteArrayOutputStream baos = null;
         DataOutputStream dos = null;
@@ -425,7 +428,7 @@ public final class AiffFileWriter extends SunFileWriter {
            from float to double. We hope that in this conversion,
            numbers are normalized. Numbers that cannot be normalized are
            ignored, too, as they, too, do not represent useful sample rates. */
-        long doubleBits = Double.doubleToLongBits((double) f);
+        long doubleBits = Double.doubleToLongBits(f);
 
         long sign = (doubleBits & DOUBLE_SIGN_MASK)
             >> (DOUBLE_EXPONENT_LENGTH + DOUBLE_MANTISSA_LENGTH);

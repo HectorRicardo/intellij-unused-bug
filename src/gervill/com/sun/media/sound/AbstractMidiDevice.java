@@ -102,6 +102,7 @@ abstract class AbstractMidiDevice implements MidiDevice, ReferenceCountingDevice
 
     // MIDI DEVICE METHODS
 
+    @Override
     public final MidiDevice.Info getDeviceInfo() {
         return info;
     }
@@ -111,6 +112,7 @@ abstract class AbstractMidiDevice implements MidiDevice, ReferenceCountingDevice
      * opened the the device implicitly from closing it. The only way to close the device after
      * this call is a call to close().
      */
+    @Override
     public final void open() throws MidiUnavailableException {
         if (Printer.trace) Printer.trace("> AbstractMidiDevice: open()");
         synchronized(this) {
@@ -159,6 +161,7 @@ abstract class AbstractMidiDevice implements MidiDevice, ReferenceCountingDevice
     }
 
 
+    @Override
     public final void close() {
         if (Printer.trace) Printer.trace("> AbstractMidiDevice: close()");
         synchronized (this) {
@@ -209,6 +212,7 @@ abstract class AbstractMidiDevice implements MidiDevice, ReferenceCountingDevice
     }
 
 
+    @Override
     public final boolean isOpen() {
         return open;
     }
@@ -236,6 +240,7 @@ abstract class AbstractMidiDevice implements MidiDevice, ReferenceCountingDevice
      * Devices that actually provide this should over-ride
      * this method.
      */
+    @Override
     public long getMicrosecondPosition() {
         return -1;
     }
@@ -245,6 +250,7 @@ abstract class AbstractMidiDevice implements MidiDevice, ReferenceCountingDevice
         Depending on the return value of hasReceivers(), this method returns either 0 or -1.
         Subclasses should rather override hasReceivers() than override this method.
      */
+    @Override
     public final int getMaxReceivers() {
         if (hasReceivers()) {
             return -1;
@@ -258,6 +264,7 @@ abstract class AbstractMidiDevice implements MidiDevice, ReferenceCountingDevice
         Depending on the return value of hasTransmitters(), this method returns either 0 or -1.
         Subclasses should override hasTransmitters().
      */
+    @Override
     public final int getMaxTransmitters() {
         if (hasTransmitters()) {
             return -1;
@@ -274,6 +281,7 @@ abstract class AbstractMidiDevice implements MidiDevice, ReferenceCountingDevice
         If createReceiver returns a Receiver, it is added to the internal list
         of Receivers (see getReceiversList)
      */
+    @Override
     public final Receiver getReceiver() throws MidiUnavailableException {
         Receiver receiver;
         synchronized (traRecLock) {
@@ -284,6 +292,7 @@ abstract class AbstractMidiDevice implements MidiDevice, ReferenceCountingDevice
     }
 
 
+    @Override
     public final List<Receiver> getReceivers() {
         List<Receiver> recs;
         synchronized (traRecLock) {
@@ -303,6 +312,7 @@ abstract class AbstractMidiDevice implements MidiDevice, ReferenceCountingDevice
      * If a transmitter is returned in createTransmitter, it is added to the internal
      * TransmitterList
      */
+    @Override
     public final Transmitter getTransmitter() throws MidiUnavailableException {
         Transmitter transmitter;
         synchronized (traRecLock) {
@@ -313,6 +323,7 @@ abstract class AbstractMidiDevice implements MidiDevice, ReferenceCountingDevice
     }
 
 
+    @Override
     public final List<Transmitter> getTransmitters() {
         List<Transmitter> tras;
         synchronized (traRecLock) {
@@ -339,6 +350,7 @@ abstract class AbstractMidiDevice implements MidiDevice, ReferenceCountingDevice
     /** Retrieve a Receiver and open the device implicitly.
         This method is called by MidiSystem.getReceiver().
      */
+    @Override
     public final Receiver getReceiverReferenceCounting()
             throws MidiUnavailableException {
         /* Keep this order of commands! If getReceiver() throws an exception,
@@ -356,6 +368,7 @@ abstract class AbstractMidiDevice implements MidiDevice, ReferenceCountingDevice
     /** Retrieve a Transmitter and open the device implicitly.
         This method is called by MidiSystem.getTransmitter().
      */
+    @Override
     public final Transmitter getTransmitterReferenceCounting()
             throws MidiUnavailableException {
         /* Keep this order of commands! If getTransmitter() throws an exception,
@@ -464,6 +477,7 @@ abstract class AbstractMidiDevice implements MidiDevice, ReferenceCountingDevice
     /**
      * close this device if discarded by the garbage collector
      */
+    @Override
     protected final void finalize() {
         close();
     }
@@ -548,14 +562,16 @@ abstract class AbstractMidiDevice implements MidiDevice, ReferenceCountingDevice
             this.tlist = tlist;
         }
 
+        @Override
         public final void setReceiver(Receiver receiver) {
             if (tlist != null && this.receiver != receiver) {
                 if (Printer.debug) Printer.debug("Transmitter "+toString()+": set receiver "+receiver);
-                tlist.receiverChanged(this, this.receiver, receiver);
+                tlist.receiverChanged(this.receiver, receiver);
                 this.receiver = receiver;
             }
         }
 
+        @Override
         public final Receiver getReceiver() {
             return receiver;
         }
@@ -566,15 +582,17 @@ abstract class AbstractMidiDevice implements MidiDevice, ReferenceCountingDevice
          * Therefore, subclasses that override this method must call
          * 'super.close()'.
          */
+        @Override
         public final void close() {
             AbstractMidiDevice.this.closeInternal(this);
             if (tlist != null) {
-                tlist.receiverChanged(this, this.receiver, null);
+                tlist.receiverChanged(this.receiver, null);
                 tlist.remove(this);
                 tlist = null;
             }
         }
 
+        @Override
         public final MidiDevice getMidiDevice() {
             return AbstractMidiDevice.this;
         }
@@ -615,8 +633,7 @@ abstract class AbstractMidiDevice implements MidiDevice, ReferenceCountingDevice
             }
         }
 
-        private void receiverChanged(BasicTransmitter t,
-                                     Receiver oldR,
+        private void receiverChanged(Receiver oldR,
                                      Receiver newR) {
             synchronized(transmitters) {
                 // some optimization
@@ -667,7 +684,7 @@ abstract class AbstractMidiDevice implements MidiDevice, ReferenceCountingDevice
                     } else {
                         if (TRACE_TRANSMITTER) Printer.println("Sending packed message to "+size+" transmitter's receivers");
                         for (int i = 0; i < size; i++) {
-                            Receiver receiver = ((Transmitter)transmitters.get(i)).getReceiver();
+                            Receiver receiver = transmitters.get(i).getReceiver();
                             if (receiver != null) {
                                 if (optimizedReceiverCount > 0) {
                                     if (receiver instanceof MidiOutDevice.MidiOutReceiver) {
@@ -693,7 +710,7 @@ abstract class AbstractMidiDevice implements MidiDevice, ReferenceCountingDevice
                     int size = transmitters.size();
                     if (TRACE_TRANSMITTER) Printer.println("Sending long message to "+size+" transmitter's receivers");
                     for (int i = 0; i < size; i++) {
-                        Receiver receiver = ((Transmitter)transmitters.get(i)).getReceiver();
+                        Receiver receiver = transmitters.get(i).getReceiver();
                         if (receiver != null) {
                             //$$fb 2002-04-02: SysexMessages are mutable, so
                             // an application could change the contents of this object,
@@ -729,7 +746,7 @@ abstract class AbstractMidiDevice implements MidiDevice, ReferenceCountingDevice
                 } else {
                     if (TRACE_TRANSMITTER) Printer.println("Sending MIDI message to "+size+" transmitter's receivers");
                     for (int i = 0; i < size; i++) {
-                        Receiver receiver = ((Transmitter)transmitters.get(i)).getReceiver();
+                        Receiver receiver = transmitters.get(i).getReceiver();
                         if (receiver != null) {
                             //$$fb 2002-04-02: ShortMessages are mutable, so
                             // an application could change the contents of this object,

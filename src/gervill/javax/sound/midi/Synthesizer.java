@@ -25,8 +25,6 @@
 
 package gervill.javax.sound.midi;
 
-import gervill.javax.sound.sampled.Control;
-
 
 /**
  * A <code>Synthesizer</code> generates sound.  This usually happens when one of
@@ -86,7 +84,7 @@ public interface Synthesizer extends MidiDevice {
      * @return the maximum number of simultaneous notes
      * see #getVoiceStatus
      */
-    public int getMaxPolyphony();
+    int getMaxPolyphony();
 
 
     /**
@@ -101,7 +99,7 @@ public interface Synthesizer extends MidiDevice {
      *
      * @return the worst-case delay, in microseconds
      */
-    public long getLatency();
+    long getLatency();
 
 
     /**
@@ -117,7 +115,7 @@ public interface Synthesizer extends MidiDevice {
      * @return an array of the <code>MidiChannel</code> objects managed by this
      * <code>Synthesizer</code>.  Some of the array elements may be <code>null</code>.
      */
-    public MidiChannel[] getChannels();
+    MidiChannel[] getChannels();
 
 
     /**
@@ -133,7 +131,7 @@ public interface Synthesizer extends MidiDevice {
      * see #getMaxPolyphony
      * see VoiceStatus
      */
-    public VoiceStatus[] getVoiceStatus();
+    VoiceStatus[] getVoiceStatus();
 
 
     /**
@@ -149,7 +147,7 @@ public interface Synthesizer extends MidiDevice {
      * see #unloadAllInstruments
      * see #getDefaultSoundbank
      */
-    public boolean isSoundbankSupported(Soundbank soundbank);
+    boolean isSoundbankSupported(Soundbank soundbank);
 
 
     /**
@@ -180,7 +178,7 @@ public interface Synthesizer extends MidiDevice {
      * see SoundbankResource#getSoundbank
      * see MidiChannel#programChange(int, int)
      */
-    public boolean loadInstrument(Instrument instrument);
+    boolean loadInstrument(Instrument instrument);
 
 
     /**
@@ -195,7 +193,7 @@ public interface Synthesizer extends MidiDevice {
      * see #getLoadedInstruments
      * see #remapInstrument
      */
-    public void unloadInstrument(Instrument instrument);
+    void unloadInstrument(Instrument instrument);
 
 
     /**
@@ -223,7 +221,7 @@ public interface Synthesizer extends MidiDevice {
      * see #loadInstruments
      * see #loadAllInstruments
      */
-    public boolean remapInstrument(Instrument from, Instrument to);
+    boolean remapInstrument(Instrument from, Instrument to);
 
 
     /**
@@ -234,7 +232,7 @@ public interface Synthesizer extends MidiDevice {
      * @return default soundbank, or <code>null</code> if one does not exist.
      * see #isSoundbankSupported
      */
-    public Soundbank getDefaultSoundbank();
+    Soundbank getDefaultSoundbank();
 
 
     /**
@@ -257,7 +255,7 @@ public interface Synthesizer extends MidiDevice {
      * see #isSoundbankSupported(Soundbank)
      * see #loadInstrument
      */
-    public Instrument[] getAvailableInstruments();
+    Instrument[] getAvailableInstruments();
 
 
     /**
@@ -268,7 +266,7 @@ public interface Synthesizer extends MidiDevice {
      * see #getAvailableInstruments
      * see Soundbank#getInstruments
      */
-    public Instrument[] getLoadedInstruments();
+    Instrument[] getLoadedInstruments();
 
 
     /**
@@ -285,7 +283,7 @@ public interface Synthesizer extends MidiDevice {
      * see #loadInstrument
      * see #loadInstruments
      */
-    public boolean loadAllInstruments(Soundbank soundbank);
+    boolean loadAllInstruments(Soundbank soundbank);
 
 
 
@@ -297,7 +295,7 @@ public interface Synthesizer extends MidiDevice {
      * see #unloadInstrument
      * see #unloadInstruments
      */
-    public void unloadAllInstruments(Soundbank soundbank);
+    void unloadAllInstruments(Soundbank soundbank);
 
 
     /**
@@ -319,7 +317,7 @@ public interface Synthesizer extends MidiDevice {
      * see Soundbank#getInstrument(Patch)
      * see Sequence#getPatchList()
      */
-    public boolean loadInstruments(Soundbank soundbank, Patch[] patchList);
+    boolean loadInstruments(Soundbank soundbank, Patch[] patchList);
 
     /**
      * Unloads the instruments referenced by the specified patches, from the MIDI sound bank specified.
@@ -333,7 +331,7 @@ public interface Synthesizer extends MidiDevice {
      * see Instrument#getPatch
      * see #loadInstruments
      */
-    public void unloadInstruments(Soundbank soundbank, Patch[] patchList);
+    void unloadInstruments(Soundbank soundbank, Patch[] patchList);
 
 
     // RECEIVER METHODS

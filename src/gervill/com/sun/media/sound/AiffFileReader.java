@@ -71,6 +71,7 @@ public final class AiffFileReader extends SunFileReader {
      * see InputStream#markSupported
      * see InputStream#mark
      */
+    @Override
     public AudioFileFormat getAudioFileFormat(InputStream stream) throws UnsupportedAudioFileException, IOException {
         // fix for 4489272: AudioSystem.getAudioFileFormat() fails for InputStream, but works for URL
         AudioFileFormat aff = getCOMM(stream, true);
@@ -91,6 +92,7 @@ public final class AiffFileReader extends SunFileReader {
      * file data recognized by the system
      * throws IOException if an I/O exception occurs
      */
+    @Override
     public AudioFileFormat getAudioFileFormat(URL url) throws UnsupportedAudioFileException, IOException {
         AudioFileFormat fileFormat = null;
         InputStream urlStream = url.openStream();       // throws IOException
@@ -113,6 +115,7 @@ public final class AiffFileReader extends SunFileReader {
      * file data recognized by the system
      * throws IOException if an I/O exception occurs
      */
+    @Override
     public AudioFileFormat getAudioFileFormat(File file) throws UnsupportedAudioFileException, IOException {
         AudioFileFormat fileFormat = null;
         FileInputStream fis = new FileInputStream(file);       // throws IOException
@@ -148,6 +151,7 @@ public final class AiffFileReader extends SunFileReader {
      * see InputStream#markSupported
      * see InputStream#mark
      */
+    @Override
     public AudioInputStream getAudioInputStream(InputStream stream) throws UnsupportedAudioFileException, IOException {
         // getCOMM leaves the input stream at the beginning of the audio data
         AudioFileFormat fileFormat = getCOMM(stream, true);     // throws UnsupportedAudioFileException, IOException
@@ -169,6 +173,7 @@ public final class AiffFileReader extends SunFileReader {
      * file data recognized by the system
      * throws IOException if an I/O exception occurs
      */
+    @Override
     public AudioInputStream getAudioInputStream(URL url) throws UnsupportedAudioFileException, IOException {
         InputStream urlStream = url.openStream();  // throws IOException
         AudioFileFormat fileFormat = null;
@@ -194,6 +199,7 @@ public final class AiffFileReader extends SunFileReader {
      * file data recognized by the system
      * throws IOException if an I/O exception occurs
      */
+    @Override
     public AudioInputStream getAudioInputStream(File file)
         throws UnsupportedAudioFileException, IOException {
 
@@ -406,17 +412,17 @@ public final class AiffFileReader extends SunFileReader {
         int expon = 0;
         long hiMant = 0, loMant = 0;
         long t1, t2;
-        double HUGE = ((double)3.40282346638528860e+38);
+        double HUGE = 3.40282346638528860e+38;
 
 
         expon = dis.readUnsignedShort();
 
-        t1 = (long)dis.readUnsignedShort();
-        t2 = (long)dis.readUnsignedShort();
+        t1 = dis.readUnsignedShort();
+        t2 = dis.readUnsignedShort();
         hiMant = t1 << 16 | t2;
 
-        t1 = (long)dis.readUnsignedShort();
-        t2 = (long)dis.readUnsignedShort();
+        t1 = dis.readUnsignedShort();
+        t2 = dis.readUnsignedShort();
         loMant = t1 << 16 | t2;
 
         if (expon == 0 && hiMant == 0 && loMant == 0) {

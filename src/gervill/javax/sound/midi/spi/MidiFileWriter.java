@@ -71,7 +71,7 @@ public abstract class MidiFileWriter {
      */
     public boolean isFileTypeSupported(int fileType) {
 
-        int types[] = getMidiFileTypes();
+        int[] types = getMidiFileTypes();
         for(int i=0; i<types.length; i++) {
             if( fileType == types[i] ) {
                 return true;
@@ -91,7 +91,7 @@ public abstract class MidiFileWriter {
      */
     public boolean isFileTypeSupported(int fileType, Sequence sequence) {
 
-        int types[] = getMidiFileTypes( sequence );
+        int[] types = getMidiFileTypes( sequence );
         for(int i=0; i<types.length; i++) {
             if( fileType == types[i] ) {
                 return true;

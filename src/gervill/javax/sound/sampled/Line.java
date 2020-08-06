@@ -77,7 +77,7 @@ public interface Line extends AutoCloseable {
      * line.
      * @return description of the line
      */
-    public Line.Info getLineInfo();
+    Line.Info getLineInfo();
 
     /**
      * Opens the line, indicating that it should acquire any required
@@ -123,7 +123,7 @@ public interface Line extends AutoCloseable {
      * see Clip#open(AudioFormat, byte[], int, int)
      * see Clip#open(AudioInputStream)
      */
-    public void open() throws LineUnavailableException;
+    void open() throws LineUnavailableException;
 
 
     /**
@@ -138,7 +138,8 @@ public interface Line extends AutoCloseable {
      * see #isOpen
      * see LineEvent
      */
-    public void close();
+    @Override
+    void close();
 
 
 
@@ -151,7 +152,7 @@ public interface Line extends AutoCloseable {
      * see #open()
      * see #close()
      */
-    public boolean isOpen();
+    boolean isOpen();
 
 
     /**
@@ -161,7 +162,7 @@ public interface Line extends AutoCloseable {
      * @return the array of controls
      * see #getControl
      */
-    public Control[] getControls();
+    Control[] getControls();
 
     /**
      * Indicates whether the line supports a control of the specified type.
@@ -170,7 +171,7 @@ public interface Line extends AutoCloseable {
      * @return <code>true</code> if at least one control of the specified type is
      * supported, otherwise <code>false</code>.
      */
-    public boolean isControlSupported(Control.Type control);
+    boolean isControlSupported(Control.Type control);
 
 
     /**
@@ -184,7 +185,7 @@ public interface Line extends AutoCloseable {
      * see #getControls
      * see #isControlSupported(Control.Type control)
      */
-    public Control getControl(Control.Type control);
+    Control getControl(Control.Type control);
 
 
     /**
@@ -196,7 +197,7 @@ public interface Line extends AutoCloseable {
      * see LineListener#update
      * see LineEvent
      */
-    public void addLineListener(LineListener listener);
+    void addLineListener(LineListener listener);
 
 
     /**
@@ -204,7 +205,7 @@ public interface Line extends AutoCloseable {
      * @param listener listener to remove
      * see #addLineListener
      */
-    public void removeLineListener(LineListener listener);
+    void removeLineListener(LineListener listener);
 
 
     /**
@@ -237,7 +238,7 @@ public interface Line extends AutoCloseable {
      * see AudioSystem#isLineSupported <code>AudioSystem.isLineSupported(Line.Info)</code>
      * @since 1.3
      */
-    public static class Info {
+    class Info {
 
         /**
          * The class of the line described by the info object.
@@ -325,11 +326,7 @@ public interface Line extends AutoCloseable {
             //                                                          =>      this is at least as general as that
             //                                                          =>      that may be subtype of this
 
-            if (! (getLineClass().isAssignableFrom(info.getLineClass())) ) {
-                return false;
-            }
-
-            return true;
+            return getLineClass().isAssignableFrom(info.getLineClass());
         }
 
 
@@ -337,16 +334,17 @@ public interface Line extends AutoCloseable {
          * Obtains a textual description of the line info.
          * @return a string description
          */
+        @Override
         public String toString() {
 
             String fullPackagePath = "gervill.javax.sound.sampled.";
-            String initialString = new String(getLineClass().toString());
+            String initialString = getLineClass().toString();
             String finalString;
 
             int index = initialString.indexOf(fullPackagePath);
 
             if (index != -1) {
-                finalString = initialString.substring(0, index) + initialString.substring( (index + fullPackagePath.length()), initialString.length() );
+                finalString = initialString.substring(0, index) + initialString.substring( (index + fullPackagePath.length()));
             } else {
                 finalString = initialString;
             }

@@ -139,7 +139,7 @@ abstract class AbstractDataLine extends AbstractLine implements DataLine {
                 }
                 //$$fb 2002-07-26: allow changing the buffersize of already open lines
                 if (bufferSize > 0) {
-                    setBufferSize(bufferSize);
+                    setBufferSize();
                 }
             }
 
@@ -156,6 +156,7 @@ abstract class AbstractDataLine extends AbstractLine implements DataLine {
     /**
      * This implementation always returns 0.
      */
+    @Override
     public int available() {
         return 0;
     }
@@ -164,6 +165,7 @@ abstract class AbstractDataLine extends AbstractLine implements DataLine {
     /**
      * This implementation does nothing.
      */
+    @Override
     public void drain() {
         if (Printer.trace) Printer.trace("AbstractDataLine: drain");
     }
@@ -172,11 +174,13 @@ abstract class AbstractDataLine extends AbstractLine implements DataLine {
     /**
      * This implementation does nothing.
      */
+    @Override
     public void flush() {
         if (Printer.trace) Printer.trace("AbstractDataLine: flush");
     }
 
 
+    @Override
     public final void start() {
         //$$fb 2001-10-09: Bug #4517739: avoiding deadlock by synchronizing to mixer !
         synchronized(mixer) {
@@ -201,6 +205,7 @@ abstract class AbstractDataLine extends AbstractLine implements DataLine {
     }
 
 
+    @Override
     public final void stop() {
 
         //$$fb 2001-10-09: Bug #4517739: avoiding deadlock by synchronizing to mixer !
@@ -245,15 +250,18 @@ abstract class AbstractDataLine extends AbstractLine implements DataLine {
     // in MixerSourceLine and MixerClip, and I want to touch as little
     // code as possible to change isStarted() back to isRunning().
 
+    @Override
     public final boolean isRunning() {
         return started;
     }
 
+    @Override
     public final boolean isActive() {
         return active;
     }
 
 
+    @Override
     public final long getMicrosecondPosition() {
 
         long microseconds = getLongFramePosition();
@@ -264,11 +272,13 @@ abstract class AbstractDataLine extends AbstractLine implements DataLine {
     }
 
 
+    @Override
     public final AudioFormat getFormat() {
         return format;
     }
 
 
+    @Override
     public final int getBufferSize() {
         return bufferSize;
     }
@@ -276,13 +286,14 @@ abstract class AbstractDataLine extends AbstractLine implements DataLine {
     /**
      * This implementation does NOT change the buffer size
      */
-    public final int setBufferSize(int newSize) {
+    public final int setBufferSize() {
         return getBufferSize();
     }
 
     /**
      * This implementation returns AudioSystem.NOT_SPECIFIED.
      */
+    @Override
     public final float getLevel() {
         return (float)AudioSystem.NOT_SPECIFIED;
     }
@@ -404,6 +415,7 @@ abstract class AbstractDataLine extends AbstractLine implements DataLine {
      * line is open, this should return quietly because the values
      * requested will match the current ones.
      */
+    @Override
     public final void open() throws LineUnavailableException {
 
         if (Printer.trace) Printer.trace("> "+getClass().getName()+".open() - AbstractDataLine");
@@ -418,6 +430,7 @@ abstract class AbstractDataLine extends AbstractLine implements DataLine {
      * This should also stop the line.  The closed line should not be running or active.
      * After we close the line, we reset the format and buffer size to the defaults.
      */
+    @Override
     public final void close() {
         //$$fb 2001-10-09: Bug #4517739: avoiding deadlock by synchronizing to mixer !
         synchronized (mixer) {

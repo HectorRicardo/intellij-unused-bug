@@ -54,7 +54,7 @@ public final class PCMtoPCMCodec extends SunCodec {
 
 
     private static final int tempBufferSize = 64;
-    private byte tempBuffer [] = null;
+    private byte[] tempBuffer = null;
 
     /**
      * Constructs a new PCMtoPCM codec object.
@@ -69,12 +69,13 @@ public final class PCMtoPCMCodec extends SunCodec {
 
     /**
      */
+    @Override
     public AudioFormat.Encoding[] getTargetEncodings(AudioFormat sourceFormat){
 
         if( sourceFormat.getEncoding().equals( AudioFormat.Encoding.PCM_SIGNED ) ||
             sourceFormat.getEncoding().equals( AudioFormat.Encoding.PCM_UNSIGNED ) ) {
 
-                AudioFormat.Encoding encs[] = new AudioFormat.Encoding[2];
+                AudioFormat.Encoding[] encs = new AudioFormat.Encoding[2];
                 encs[0] = AudioFormat.Encoding.PCM_SIGNED;
                 encs[1] = AudioFormat.Encoding.PCM_UNSIGNED;
                 return encs;
@@ -86,6 +87,7 @@ public final class PCMtoPCMCodec extends SunCodec {
 
     /**
      */
+    @Override
     public AudioFormat[] getTargetFormats(AudioFormat.Encoding targetEncoding, AudioFormat sourceFormat){
 
         // filter out targetEncoding from the old getOutputFormats( sourceFormat ) method
@@ -110,6 +112,7 @@ public final class PCMtoPCMCodec extends SunCodec {
 
     /**
      */
+    @Override
     public AudioInputStream getAudioInputStream(AudioFormat.Encoding targetEncoding, AudioInputStream sourceStream) {
 
         if( isConversionSupported(targetEncoding, sourceStream.getFormat()) ) {
@@ -133,6 +136,7 @@ public final class PCMtoPCMCodec extends SunCodec {
     /**
      * use old code
      */
+    @Override
     public AudioInputStream getAudioInputStream(AudioFormat targetFormat, AudioInputStream sourceStream){
 
         return getConvertedStream( targetFormat, sourceStream );
@@ -163,7 +167,7 @@ public final class PCMtoPCMCodec extends SunCodec {
             cs = stream;
         } else {
 
-            cs = (AudioInputStream) (new PCMtoPCMCodecStream(stream, outputFormat));
+            cs = new PCMtoPCMCodecStream(stream, outputFormat);
             tempBuffer = new byte[tempBufferSize];
         }
         return cs;
@@ -453,6 +457,7 @@ public final class PCMtoPCMCodec extends SunCodec {
          * Other conversions require a read of at least 2 bytes.
          */
 
+        @Override
         public int read() throws IOException {
 
             // $$jb: do we want to implement this function?
@@ -482,11 +487,13 @@ public final class PCMtoPCMCodec extends SunCodec {
         }
 
 
+        @Override
         public int read(byte[] b) throws IOException {
 
             return read(b, 0, b.length);
         }
 
+        @Override
         public int read(byte[] b, int off, int len) throws IOException {
 
 
@@ -513,31 +520,31 @@ public final class PCMtoPCMCodec extends SunCodec {
             switch( conversionType ) {
 
             case PCM_SWITCH_SIGNED_8BIT:
-                switchSigned8bit(b,off,len,readCount);
+                switchSigned8bit(b,off, readCount);
                 break;
 
             case PCM_SWITCH_ENDIAN:
-                switchEndian(b,off,len,readCount);
+                switchEndian(b,off, readCount);
                 break;
 
             case PCM_SWITCH_SIGNED_LE:
-                switchSignedLE(b,off,len,readCount);
+                switchSignedLE(b,off, readCount);
                 break;
 
             case PCM_SWITCH_SIGNED_BE:
-                switchSignedBE(b,off,len,readCount);
+                switchSignedBE(b,off, readCount);
                 break;
 
             case PCM_UNSIGNED_LE2SIGNED_BE:
             case PCM_SIGNED_LE2UNSIGNED_BE:
-                switchSignedLE(b,off,len,readCount);
-                switchEndian(b,off,len,readCount);
+                switchSignedLE(b,off, readCount);
+                switchEndian(b,off, readCount);
                 break;
 
             case PCM_UNSIGNED_BE2SIGNED_LE:
             case PCM_SIGNED_BE2UNSIGNED_LE:
-                switchSignedBE(b,off,len,readCount);
-                switchEndian(b,off,len,readCount);
+                switchSignedBE(b,off, readCount);
+                switchEndian(b,off, readCount);
                 break;
 
             default:
@@ -549,28 +556,28 @@ public final class PCMtoPCMCodec extends SunCodec {
 
         }
 
-        private void switchSigned8bit(byte[] b, int off, int len, int readCount) {
+        private void switchSigned8bit(byte[] b, int off, int readCount) {
 
             for(int i=off; i < (off+readCount); i++) {
                 b[i] = (b[i] >= 0) ? (byte)(0x80 | b[i]) : (byte)(0x7F & b[i]);
             }
         }
 
-        private void switchSignedBE(byte[] b, int off, int len, int readCount) {
+        private void switchSignedBE(byte[] b, int off, int readCount) {
 
             for(int i=off; i < (off+readCount); i+= sampleSizeInBytes ) {
                 b[i] = (b[i] >= 0) ? (byte)(0x80 | b[i]) : (byte)(0x7F & b[i]);
             }
         }
 
-        private void switchSignedLE(byte[] b, int off, int len, int readCount) {
+        private void switchSignedLE(byte[] b, int off, int readCount) {
 
             for(int i=(off+sampleSizeInBytes-1); i < (off+readCount); i+= sampleSizeInBytes ) {
                 b[i] = (b[i] >= 0) ? (byte)(0x80 | b[i]) : (byte)(0x7F & b[i]);
             }
         }
 
-        private void switchEndian(byte[] b, int off, int len, int readCount) {
+        private void switchEndian(byte[] b, int off, int readCount) {
 
             if(sampleSizeInBytes == 2) {
                 for(int i=off; i < (off+readCount); i += sampleSizeInBytes ) {

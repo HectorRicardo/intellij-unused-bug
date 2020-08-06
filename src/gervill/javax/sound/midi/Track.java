@@ -25,7 +25,6 @@
 
 package gervill.javax.sound.midi;
 
-import java.util.Vector;
 import java.util.ArrayList;
 import java.util.HashSet;
 import gervill.com.sun.media.sound.MidiUtils;
@@ -66,12 +65,12 @@ public class Track {
     // TODO: use arrays for faster access
 
     // the list containing the events
-    private ArrayList eventsList = new ArrayList();
+    private final ArrayList eventsList = new ArrayList();
 
     // use a hashset to detect duplicate events in add(MidiEvent)
-    private HashSet set = new HashSet();
+    private final HashSet set = new HashSet();
 
-    private MidiEvent eotEvent;
+    private final MidiEvent eotEvent;
 
 
     /**
@@ -267,6 +266,7 @@ public class Track {
             data[2] = 0;
         }
 
+        @Override
         public void setMessage(int type, byte[] data, int length) throws InvalidMidiDataException {
             throw new InvalidMidiDataException("cannot modify end of track message");
         }

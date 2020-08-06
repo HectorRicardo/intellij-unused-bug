@@ -215,6 +215,7 @@ final class EventDispatcher implements Runnable {
     /**
      * A loop to dispatch events.
      */
+    @Override
     public void run() {
 
         while (true) {
@@ -451,7 +452,7 @@ final class EventDispatcher implements Runnable {
         /**
          * Called by event dispatcher in regular intervals
          */
-        public void checkLine();
+        void checkLine();
     }
 
 } // class EventDispatcher

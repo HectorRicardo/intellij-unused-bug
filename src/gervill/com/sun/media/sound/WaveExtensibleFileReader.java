@@ -105,10 +105,12 @@ public final class WaveExtensibleFileReader extends AudioFileReader {
             return d;
         }
 
+        @Override
         public int hashCode() {
             return (int) i1;
         }
 
+        @Override
         public boolean equals(Object obj) {
             if (!(obj instanceof GUID))
                 return false;
@@ -133,9 +135,7 @@ public final class WaveExtensibleFileReader extends AudioFileReader {
                 return false;
             if (x7 != t.x7)
                 return false;
-            if (x8 != t.x8)
-                return false;
-            return true;
+            return x8 == t.x8;
         }
 
     }
@@ -180,6 +180,7 @@ public final class WaveExtensibleFileReader extends AudioFileReader {
 
     }
 
+    @Override
     public AudioFileFormat getAudioFileFormat(InputStream stream)
             throws UnsupportedAudioFileException, IOException {
 
@@ -282,6 +283,7 @@ public final class WaveExtensibleFileReader extends AudioFileReader {
         return fileformat;
     }
 
+    @Override
     public AudioInputStream getAudioInputStream(InputStream stream)
             throws UnsupportedAudioFileException, IOException {
 
@@ -301,6 +303,7 @@ public final class WaveExtensibleFileReader extends AudioFileReader {
         throw new UnsupportedAudioFileException();
     }
 
+    @Override
     public AudioFileFormat getAudioFileFormat(URL url)
             throws UnsupportedAudioFileException, IOException {
         InputStream stream = url.openStream();
@@ -313,6 +316,7 @@ public final class WaveExtensibleFileReader extends AudioFileReader {
         return format;
     }
 
+    @Override
     public AudioFileFormat getAudioFileFormat(File file)
             throws UnsupportedAudioFileException, IOException {
         InputStream stream = new FileInputStream(file);
@@ -325,11 +329,13 @@ public final class WaveExtensibleFileReader extends AudioFileReader {
         return format;
     }
 
+    @Override
     public AudioInputStream getAudioInputStream(URL url)
             throws UnsupportedAudioFileException, IOException {
         return getAudioInputStream(new BufferedInputStream(url.openStream()));
     }
 
+    @Override
     public AudioInputStream getAudioInputStream(File file)
             throws UnsupportedAudioFileException, IOException {
         return getAudioInputStream(new BufferedInputStream(new FileInputStream(

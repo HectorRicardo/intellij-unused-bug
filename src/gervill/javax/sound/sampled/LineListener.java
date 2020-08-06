@@ -63,6 +63,6 @@ public interface LineListener extends java.util.EventListener {
      * <code>LineEvent</code> methods to obtain information about the event.
      * @param event a line event that describes the change
      */
-    public void update(LineEvent event);
+    void update(LineEvent event);
 
 } // interface LineListener

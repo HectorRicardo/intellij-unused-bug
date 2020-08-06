@@ -90,6 +90,7 @@ final class JSSecurityManager {
             try {
                 // invoke the privileged action using 1.2 security
                 PrivilegedAction<Void> action = new PrivilegedAction<Void>() {
+                        @Override
                         public Void run() {
                             loadPropertiesImpl(properties, filename);
                             return null;
@@ -176,6 +177,7 @@ final class JSSecurityManager {
         // the iterator's hasNext() method looks through classpath for
         // the provider class names, so it requires read permissions
         PrivilegedAction<Boolean> hasNextAction = new PrivilegedAction<Boolean>() {
+            @Override
             public Boolean run() {
                 return ps.hasNext();
             }

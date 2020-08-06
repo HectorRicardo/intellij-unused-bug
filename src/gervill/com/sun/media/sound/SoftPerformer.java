@@ -92,6 +92,7 @@ public final class SoftPerformer {
                 ModelStandardTransform.TRANSFORM_LINEAR),
             new ModelSource(new ModelIdentifier("midi_rpn", "0"),
                 new ModelTransform() {
+                    @Override
                     public double transform(double value) {
                         int v = (int) (value * 16384.0);
                         int msb = v >> 7;
@@ -314,16 +315,17 @@ public final class SoftPerformer {
     public int[][] midi_ctrl_connections;
     public int[][] midi_connections;
     public int[] ctrl_connections;
-    private List<Integer> ctrl_connections_list = new ArrayList<Integer>();
+    private final List<Integer> ctrl_connections_list = new ArrayList<Integer>();
 
     private static class KeySortComparator implements Comparator<ModelSource> {
 
+        @Override
         public int compare(ModelSource o1, ModelSource o2) {
             return o1.getIdentifier().toString().compareTo(
                     o2.getIdentifier().toString());
         }
     }
-    private static KeySortComparator keySortComparator = new KeySortComparator();
+    private static final KeySortComparator keySortComparator = new KeySortComparator();
 
     private String extractKeys(ModelConnectionBlock conn) {
         StringBuffer sb = new StringBuffer();
@@ -648,7 +650,8 @@ public final class SoftPerformer {
                 new ModelSource(new ModelIdentifier("lfo", instance)),
                 new ModelSource(new ModelIdentifier("midi_cc", "77"),
                     new ModelTransform() {
-                        double s = scale;
+                        final double s = scale;
+                        @Override
                         public double transform(double value) {
                             value = value * 2 - 1;
                             value *= 600;

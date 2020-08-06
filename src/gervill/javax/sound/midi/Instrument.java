@@ -25,9 +25,6 @@
 
 package gervill.javax.sound.midi;
 
-import java.net.URL;
-
-
 
 /**
  * An instrument is a sound-synthesis algorithm with certain parameter

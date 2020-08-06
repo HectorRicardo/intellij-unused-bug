@@ -766,7 +766,7 @@ public class AudioSystem {
         List codecs = getFormatConversionProviders();
         Vector encodings = new Vector();
 
-        AudioFormat.Encoding encs[] = null;
+        AudioFormat.Encoding[] encs = null;
 
         // gather from all the codecs
         for(int i=0; i<codecs.size(); i++ ) {
@@ -778,7 +778,7 @@ public class AudioSystem {
                 }
             }
         }
-        AudioFormat.Encoding encs2[] = (AudioFormat.Encoding[]) encodings.toArray(new AudioFormat.Encoding[0]);
+        AudioFormat.Encoding[] encs2 = (AudioFormat.Encoding[]) encodings.toArray(new AudioFormat.Encoding[0]);
         return encs2;
     }
 
@@ -803,7 +803,7 @@ public class AudioSystem {
 
         int size = 0;
         int index = 0;
-        AudioFormat.Encoding encs[] = null;
+        AudioFormat.Encoding[] encs = null;
 
         // gather from all the codecs
 
@@ -815,7 +815,7 @@ public class AudioSystem {
 
         // now build a new array
 
-        AudioFormat.Encoding encs2[] = new AudioFormat.Encoding[size];
+        AudioFormat.Encoding[] encs2 = new AudioFormat.Encoding[size];
         for(int i=0; i<encodings.size(); i++ ) {
             encs = (AudioFormat.Encoding [])(encodings.get(i));
             for(int j=0; j<encs.length; j++ ) {
@@ -894,7 +894,7 @@ public class AudioSystem {
 
         int size = 0;
         int index = 0;
-        AudioFormat fmts[] = null;
+        AudioFormat[] fmts = null;
 
         // gather from all the codecs
 
@@ -907,7 +907,7 @@ public class AudioSystem {
 
         // now build a new array
 
-        AudioFormat fmts2[] = new AudioFormat[size];
+        AudioFormat[] fmts2 = new AudioFormat[size];
         for(int i=0; i<formats.size(); i++ ) {
             fmts = (AudioFormat [])(formats.get(i));
             for(int j=0; j<fmts.length; j++ ) {
@@ -1208,7 +1208,7 @@ public class AudioSystem {
                 returnTypesSet.add(fileTypes[j]);
             }
         }
-        AudioFileFormat.Type returnTypes[] = (AudioFileFormat.Type[])
+        AudioFileFormat.Type[] returnTypes = (AudioFileFormat.Type[])
             returnTypesSet.toArray(new AudioFileFormat.Type[0]);
         return returnTypes;
     }
@@ -1254,7 +1254,7 @@ public class AudioSystem {
                 returnTypesSet.add(fileTypes[j]);
             }
         }
-        AudioFileFormat.Type returnTypes[] = (AudioFileFormat.Type[])
+        AudioFileFormat.Type[] returnTypes = (AudioFileFormat.Type[])
             returnTypesSet.toArray(new AudioFileFormat.Type[0]);
         return returnTypes;
     }
@@ -1457,9 +1457,7 @@ public class AudioSystem {
            provider class and instance specified and instance cannot be found or is not appropriate */
         if (instanceName != null) {
             mixer = getNamedMixer(instanceName, providers, info);
-            if (mixer != null) {
-                return mixer;
-            }
+            return mixer;
         }
 
 
@@ -1608,8 +1606,7 @@ public class AudioSystem {
         Mixer.Info[] allInfos;  // for all mixers
 
         for(int i = 0; i < providers.size(); i++ ) {
-            someInfos = (Mixer.Info[])
-                ((MixerProvider)providers.get(i)).getMixerInfo();
+            someInfos = ((MixerProvider)providers.get(i)).getMixerInfo();
 
             for (int j = 0; j < someInfos.length; j++) {
                 infos.add(someInfos[j]);

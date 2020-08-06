@@ -48,6 +48,7 @@ final class MidiOutDevice extends AbstractMidiDevice {
 
     // IMPLEMENTATION OF ABSTRACT MIDI DEVICE METHODS
 
+    @Override
     protected synchronized void implOpen() throws MidiUnavailableException {
         if (Printer.trace) Printer.trace("> MidiOutDevice: implOpen()");
         int index = ((AbstractMidiDeviceProvider.Info)getDeviceInfo()).getIndex();
@@ -59,6 +60,7 @@ final class MidiOutDevice extends AbstractMidiDevice {
     }
 
 
+    @Override
     protected synchronized void implClose() {
         if (Printer.trace) Printer.trace("> MidiOutDevice: implClose()");
         // prevent further action
@@ -73,6 +75,7 @@ final class MidiOutDevice extends AbstractMidiDevice {
     }
 
 
+    @Override
     public long getMicrosecondPosition() {
         long timestamp = -1;
         if (isOpen()) {
@@ -89,11 +92,13 @@ final class MidiOutDevice extends AbstractMidiDevice {
         This implementation always returns true.
         @return true, if the device supports Receivers, false otherwise.
     */
+    @Override
     protected boolean hasReceivers() {
         return true;
     }
 
 
+    @Override
     protected Receiver createReceiver() {
         return new MidiOutReceiver();
     }
@@ -103,6 +108,7 @@ final class MidiOutDevice extends AbstractMidiDevice {
 
     final class MidiOutReceiver extends AbstractReceiver {
 
+        @Override
         void implSend(final MidiMessage message, final long timeStamp) {
             final int length = message.getLength();
             final int status = message.getStatus();

@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -546,7 +547,7 @@ public final class SF2Soundbank implements Soundbank {
             return;
         RIFFWriter chunk = writer.writeChunk(name);
         chunk.writeString(value);
-        int len = value.getBytes("ascii").length;
+        int len = value.getBytes(StandardCharsets.US_ASCII).length;
         chunk.write(0);
         len++;
         if (len % 2 != 0)
@@ -633,8 +634,8 @@ public final class SF2Soundbank implements Soundbank {
 
     private void writeGenerators(RIFFWriter writer, Map<Integer, Short> generators)
             throws IOException {
-        Short keyrange = (Short) generators.get(SF2Region.GENERATOR_KEYRANGE);
-        Short velrange = (Short) generators.get(SF2Region.GENERATOR_VELRANGE);
+        Short keyrange = generators.get(SF2Region.GENERATOR_KEYRANGE);
+        Short velrange = generators.get(SF2Region.GENERATOR_VELRANGE);
         if (keyrange != null) {
             writer.writeUnsignedShort(SF2Region.GENERATOR_KEYRANGE);
             writer.writeShort(keyrange);
@@ -722,7 +723,7 @@ public final class SF2Soundbank implements Soundbank {
             }
             for (SF2InstrumentRegion region : preset.getRegions()) {
                 writeGenerators(pgen_chunk, region.getGenerators());
-                int ix = (int) layers.indexOf(region.layer);
+                int ix = layers.indexOf(region.layer);
                 if (ix != -1) {
                     pgen_chunk.writeUnsignedShort(SF2Region.GENERATOR_INSTRUMENT);
                     pgen_chunk.writeShort((short) ix);
@@ -830,18 +831,22 @@ public final class SF2Soundbank implements Soundbank {
 
     }
 
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public String getVersion() {
         return major + "." + minor;
     }
 
+    @Override
     public String getVendor() {
         return engineers;
     }
 
+    @Override
     public String getDescription() {
         return comments;
     }
@@ -858,6 +863,7 @@ public final class SF2Soundbank implements Soundbank {
         comments = s;
     }
 
+    @Override
     public SoundbankResource[] getResources() {
         SoundbankResource[] resources
                 = new SoundbankResource[layers.size() + samples.size()];
@@ -869,6 +875,7 @@ public final class SF2Soundbank implements Soundbank {
         return resources;
     }
 
+    @Override
     public SF2Instrument[] getInstruments() {
         SF2Instrument[] inslist_array
                 = instruments.toArray(new SF2Instrument[instruments.size()]);
@@ -884,6 +891,7 @@ public final class SF2Soundbank implements Soundbank {
         return samples.toArray(new SF2Sample[samples.size()]);
     }
 
+    @Override
     public Instrument getInstrument(Patch patch) {
         int program = patch.getProgram();
         int bank = patch.getBank();
@@ -972,11 +980,11 @@ public final class SF2Soundbank implements Soundbank {
 
     public void removeResource(SoundbankResource resource) {
         if (resource instanceof SF2Instrument)
-            instruments.remove((SF2Instrument)resource);
+            instruments.remove(resource);
         if (resource instanceof SF2Layer)
-            layers.remove((SF2Layer)resource);
+            layers.remove(resource);
         if (resource instanceof SF2Sample)
-            samples.remove((SF2Sample)resource);
+            samples.remove(resource);
     }
 
     public void addInstrument(SF2Instrument resource) {

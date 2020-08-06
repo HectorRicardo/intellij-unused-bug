@@ -51,6 +51,7 @@ final class FastShortMessage extends ShortMessage {
         return packedMsg;
     }
 
+    @Override
     public byte[] getMessage() {
         int length = 0;
         try {
@@ -73,6 +74,7 @@ final class FastShortMessage extends ShortMessage {
         return returnedArray;
     }
 
+    @Override
     public int getLength() {
         try {
             return getDataLength(packedMsg & 0xFF) + 1;
@@ -82,6 +84,7 @@ final class FastShortMessage extends ShortMessage {
         return 0;
     }
 
+    @Override
     public void setMessage(int status) throws InvalidMidiDataException {
         // check for valid values
         int dataLength = getDataLength(status); // can throw InvalidMidiDataException
@@ -92,34 +95,41 @@ final class FastShortMessage extends ShortMessage {
     }
 
 
+    @Override
     public void setMessage(int status, int data1, int data2) throws InvalidMidiDataException {
         getDataLength(status); // can throw InvalidMidiDataException
         packedMsg = (status & 0xFF) | ((data1 & 0xFF) << 8) | ((data2 & 0xFF) << 16);
     }
 
 
+    @Override
     public void setMessage(int command, int channel, int data1, int data2) throws InvalidMidiDataException {
         getDataLength(command); // can throw InvalidMidiDataException
         packedMsg = (command & 0xF0) | (channel & 0x0F) | ((data1 & 0xFF) << 8) | ((data2 & 0xFF) << 16);
     }
 
 
+    @Override
     public int getChannel() {
         return packedMsg & 0x0F;
     }
 
+    @Override
     public int getCommand() {
         return packedMsg & 0xF0;
     }
 
+    @Override
     public int getData1() {
         return (packedMsg & 0xFF00) >> 8;
     }
 
+    @Override
     public int getData2() {
         return (packedMsg & 0xFF0000) >> 16;
     }
 
+    @Override
     public int getStatus() {
         return packedMsg & 0xFF;
     }
@@ -129,6 +139,7 @@ final class FastShortMessage extends ShortMessage {
      * as this object.
      * @return a clone of this instance.
      */
+    @Override
     public Object clone() {
         try {
             return new FastShortMessage(packedMsg);

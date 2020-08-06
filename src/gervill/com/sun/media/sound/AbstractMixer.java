@@ -128,11 +128,13 @@ abstract class AbstractMixer extends AbstractLine implements Mixer {
     // MIXER METHODS
 
 
+    @Override
     public final Mixer.Info getMixerInfo() {
         return mixerInfo;
     }
 
 
+    @Override
     public final Line.Info[] getSourceLineInfo() {
         Line.Info[] localArray = new Line.Info[sourceLineInfo.length];
         System.arraycopy(sourceLineInfo, 0, localArray, 0, sourceLineInfo.length);
@@ -140,6 +142,7 @@ abstract class AbstractMixer extends AbstractLine implements Mixer {
     }
 
 
+    @Override
     public final Line.Info[] getTargetLineInfo() {
 
         Line.Info[] localArray = new Line.Info[targetLineInfo.length];
@@ -148,6 +151,7 @@ abstract class AbstractMixer extends AbstractLine implements Mixer {
     }
 
 
+    @Override
     public final Line.Info[] getSourceLineInfo(Line.Info info) {
 
         int i;
@@ -169,6 +173,7 @@ abstract class AbstractMixer extends AbstractLine implements Mixer {
     }
 
 
+    @Override
     public final Line.Info[] getTargetLineInfo(Line.Info info) {
 
         int i;
@@ -190,6 +195,7 @@ abstract class AbstractMixer extends AbstractLine implements Mixer {
     }
 
 
+    @Override
     public final boolean isLineSupported(Line.Info info) {
 
         int i;
@@ -212,8 +218,10 @@ abstract class AbstractMixer extends AbstractLine implements Mixer {
     }
 
 
+    @Override
     public abstract Line getLine(Line.Info info) throws LineUnavailableException;
 
+    @Override
     public abstract int getMaxLines(Line.Info info);
 
     protected abstract void implOpen() throws LineUnavailableException;
@@ -222,6 +230,7 @@ abstract class AbstractMixer extends AbstractLine implements Mixer {
     protected abstract void implClose();
 
 
+    @Override
     public final Line[] getSourceLines() {
 
         Line[] localLines;
@@ -239,6 +248,7 @@ abstract class AbstractMixer extends AbstractLine implements Mixer {
     }
 
 
+    @Override
     public final Line[] getTargetLines() {
 
         Line[] localLines;
@@ -259,7 +269,8 @@ abstract class AbstractMixer extends AbstractLine implements Mixer {
     /**
      * Default implementation always throws an exception.
      */
-    public final void synchronize(Line[] lines, boolean maintainSync) {
+    @Override
+    public final void synchronize() {
         throw new IllegalArgumentException("Synchronization not supported by this mixer.");
     }
 
@@ -267,7 +278,8 @@ abstract class AbstractMixer extends AbstractLine implements Mixer {
     /**
      * Default implementation always throws an exception.
      */
-    public final void unsynchronize(Line[] lines) {
+    @Override
+    public final void unsynchronize() {
         throw new IllegalArgumentException("Synchronization not supported by this mixer.");
     }
 
@@ -275,8 +287,8 @@ abstract class AbstractMixer extends AbstractLine implements Mixer {
     /**
      * Default implementation always returns false.
      */
-    public final boolean isSynchronizationSupported(Line[] lines,
-                                                    boolean maintainSync) {
+    @Override
+    public final boolean isSynchronizationSupported() {
         return false;
     }
 
@@ -286,6 +298,7 @@ abstract class AbstractMixer extends AbstractLine implements Mixer {
     /**
      * This implementation tries to open the mixer with its current format and buffer size settings.
      */
+    @Override
     public final synchronized void open() throws LineUnavailableException {
         open(true);
     }
@@ -392,6 +405,7 @@ abstract class AbstractMixer extends AbstractLine implements Mixer {
     /**
      * Close all lines and then close this mixer.
      */
+    @Override
     public final synchronized void close() {
         if (Printer.trace) Printer.trace(">> AbstractMixer: close()");
         if (isOpen()) {

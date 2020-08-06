@@ -156,9 +156,11 @@ public final class ModelStandardIndexedDirector implements ModelDirector {
         }
     }
 
+    @Override
     public void close() {
     }
 
+    @Override
     public void noteOff(int noteNumber, int velocity) {
         if (!noteOffUsed)
             return;
@@ -172,6 +174,7 @@ public final class ModelStandardIndexedDirector implements ModelDirector {
         }
     }
 
+    @Override
     public void noteOn(int noteNumber, int velocity) {
         if (!noteOnUsed)
             return;

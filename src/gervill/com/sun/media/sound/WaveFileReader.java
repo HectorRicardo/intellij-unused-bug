@@ -70,6 +70,7 @@ public final class WaveFileReader extends SunFileReader {
      * see InputStream#markSupported
      * see InputStream#mark
      */
+    @Override
     public AudioFileFormat getAudioFileFormat(InputStream stream) throws UnsupportedAudioFileException, IOException {
         // fix for 4489272: AudioSystem.getAudioFileFormat() fails for InputStream, but works for URL
         AudioFileFormat aff = getFMT(stream, true);
@@ -90,6 +91,7 @@ public final class WaveFileReader extends SunFileReader {
      * file data recognized by the system
      * throws IOException if an I/O exception occurs
      */
+    @Override
     public AudioFileFormat getAudioFileFormat(URL url) throws UnsupportedAudioFileException, IOException {
         InputStream urlStream = url.openStream(); // throws IOException
         AudioFileFormat fileFormat = null;
@@ -112,6 +114,7 @@ public final class WaveFileReader extends SunFileReader {
      * file data recognized by the system
      * throws IOException if an I/O exception occurs
      */
+    @Override
     public AudioFileFormat getAudioFileFormat(File file) throws UnsupportedAudioFileException, IOException {
         AudioFileFormat fileFormat = null;
         FileInputStream fis = new FileInputStream(file);       // throws IOException
@@ -145,6 +148,7 @@ public final class WaveFileReader extends SunFileReader {
      * see InputStream#markSupported
      * see InputStream#mark
      */
+    @Override
     public AudioInputStream getAudioInputStream(InputStream stream) throws UnsupportedAudioFileException, IOException {
         // getFMT leaves the input stream at the beginning of the audio data
         AudioFileFormat fileFormat = getFMT(stream, true); // throws UnsupportedAudioFileException, IOException
@@ -166,6 +170,7 @@ public final class WaveFileReader extends SunFileReader {
      * file data recognized by the system
      * throws IOException if an I/O exception occurs
      */
+    @Override
     public AudioInputStream getAudioInputStream(URL url) throws UnsupportedAudioFileException, IOException {
         InputStream urlStream = url.openStream();  // throws IOException
         AudioFileFormat fileFormat = null;
@@ -191,6 +196,7 @@ public final class WaveFileReader extends SunFileReader {
      * file data recognized by the system
      * throws IOException if an I/O exception occurs
      */
+    @Override
     public AudioInputStream getAudioInputStream(File file) throws UnsupportedAudioFileException, IOException {
         FileInputStream fis = new FileInputStream(file); // throws IOException
         AudioFileFormat fileFormat = null;
@@ -311,7 +317,7 @@ public final class WaveFileReader extends SunFileReader {
         blockAlign = rlshort(dis); nread += 2;
 
         // this is the PCM-specific value bitsPerSample
-        sampleSizeInBits = (int)rlshort(dis); nread += 2;
+        sampleSizeInBits = rlshort(dis); nread += 2;
         if (sampleSizeInBits <= 0) {
             throw new UnsupportedAudioFileException("Invalid bitsPerSample");
         }

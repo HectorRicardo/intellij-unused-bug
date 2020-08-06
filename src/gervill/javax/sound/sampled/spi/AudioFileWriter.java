@@ -26,7 +26,6 @@
 package gervill.javax.sound.sampled.spi;
 
 import java.io.File;
-import java.io.InputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -62,7 +61,7 @@ public abstract class AudioFileWriter {
      */
     public boolean isFileTypeSupported(AudioFileFormat.Type fileType) {
 
-        AudioFileFormat.Type types[] = getAudioFileTypes();
+        AudioFileFormat.Type[] types = getAudioFileTypes();
 
         for(int i=0; i<types.length; i++) {
             if( fileType.equals( types[i] ) ) {
@@ -94,7 +93,7 @@ public abstract class AudioFileWriter {
      */
     public boolean isFileTypeSupported(AudioFileFormat.Type fileType, AudioInputStream stream) {
 
-        AudioFileFormat.Type types[] = getAudioFileTypes( stream );
+        AudioFileFormat.Type[] types = getAudioFileTypes( stream );
 
         for(int i=0; i<types.length; i++) {
             if( fileType.equals( types[i] ) ) {

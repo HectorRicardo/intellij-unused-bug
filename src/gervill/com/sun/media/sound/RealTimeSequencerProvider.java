@@ -37,6 +37,7 @@ import gervill.javax.sound.midi.spi.MidiDeviceProvider;
 public final class RealTimeSequencerProvider extends MidiDeviceProvider {
 
 
+    @Override
     public MidiDevice.Info[] getDeviceInfo() {
 
         MidiDevice.Info[] localArray = { RealTimeSequencer.info };
@@ -44,6 +45,7 @@ public final class RealTimeSequencerProvider extends MidiDeviceProvider {
     }
 
 
+    @Override
     public MidiDevice getDevice(MidiDevice.Info info) {
         if ((info != null) && (!info.equals(RealTimeSequencer.info))) {
             return null;

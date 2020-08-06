@@ -43,7 +43,7 @@ public interface Transmitter extends AutoCloseable {
      * If a receiver is currently set, it is replaced with this one.
      * @param receiver the desired receiver.
      */
-    public void setReceiver(Receiver receiver);
+    void setReceiver(Receiver receiver);
 
 
     /**
@@ -51,7 +51,7 @@ public interface Transmitter extends AutoCloseable {
      * @return the current receiver.  If no receiver is currently set,
      * returns <code>null</code>
      */
-    public Receiver getReceiver();
+    Receiver getReceiver();
 
 
     /**
@@ -72,5 +72,6 @@ public interface Transmitter extends AutoCloseable {
      *
      * see gervill.javax.sound.midi.MidiSystem#getTransmitter
      */
-    public void close();
+    @Override
+    void close();
 }

@@ -61,7 +61,7 @@ public abstract class EnumControl extends Control {
     /**
      * The set of possible values.
      */
-    private Object[] values;
+    private final Object[] values;
 
 
     /**
@@ -166,8 +166,9 @@ public abstract class EnumControl extends Control {
      * Provides a string representation of the control.
      * @return a string description
      */
+    @Override
     public String toString() {
-        return new String(getType() + " with current value: " + getValue());
+        return getType() + " with current value: " + getValue();
     }
 
 

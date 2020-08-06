@@ -44,7 +44,7 @@ public final class SoftInstrument extends Instrument {
                 ins.getDataClass());
         data = ins.getData();
         this.ins = ins;
-        initPerformers(((ModelInstrument)ins).getPerformers());
+        initPerformers(ins.getPerformers());
     }
 
     public SoftInstrument(ModelInstrument ins,
@@ -72,6 +72,7 @@ public final class SoftInstrument extends Instrument {
         return ins;
     }
 
+    @Override
     public Object getData() {
         return data;
     }

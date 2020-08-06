@@ -42,21 +42,25 @@ public final class ModelMappedInstrument extends ModelInstrument {
         this.ins = ins;
     }
 
+    @Override
     public Object getData() {
         return ins.getData();
     }
 
+    @Override
     public ModelPerformer[] getPerformers() {
         return ins.getPerformers();
     }
 
+    @Override
     public ModelDirector getDirector(ModelPerformer[] performers,
-            MidiChannel channel, ModelDirectedPlayer player) {
+                                     MidiChannel channel, ModelDirectedPlayer player) {
         return ins.getDirector(performers, channel, player);
     }
 
+    @Override
     public ModelChannelMixer getChannelMixer(MidiChannel channel,
-            AudioFormat format) {
+                                             AudioFormat format) {
         return ins.getChannelMixer(channel, format);
     }
 }

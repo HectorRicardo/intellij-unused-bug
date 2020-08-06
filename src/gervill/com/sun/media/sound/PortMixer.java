@@ -57,7 +57,7 @@ final class PortMixer extends AbstractMixer {
     private static final int DST_MASK         = 0xFF00;
 
     // INSTANCE VARIABLES
-    private Port.Info[] portInfos;
+    private final Port.Info[] portInfos;
     // cache of instantiated ports
     private PortMixerPort[] ports;
 
@@ -124,6 +124,7 @@ final class PortMixer extends AbstractMixer {
 
     // ABSTRACT MIXER: ABSTRACT METHOD IMPLEMENTATIONS
 
+    @Override
     public Line getLine(Line.Info info) throws LineUnavailableException {
         Line.Info fullInfo = getLineInfo(info);
 
@@ -138,6 +139,7 @@ final class PortMixer extends AbstractMixer {
     }
 
 
+    @Override
     public int getMaxLines(Line.Info info) {
         Line.Info fullInfo = getLineInfo(info);
 
@@ -154,6 +156,7 @@ final class PortMixer extends AbstractMixer {
     }
 
 
+    @Override
     protected void implOpen() throws LineUnavailableException {
         if (Printer.trace) Printer.trace(">> PortMixer: implOpen (id="+id+")");
 
@@ -163,6 +166,7 @@ final class PortMixer extends AbstractMixer {
         if (Printer.trace) Printer.trace("<< PortMixer: implOpen succeeded.");
     }
 
+    @Override
     protected void implClose() {
         if (Printer.trace) Printer.trace(">> PortMixer: implClose");
 
@@ -181,7 +185,9 @@ final class PortMixer extends AbstractMixer {
         if (Printer.trace) Printer.trace("<< PortMixer: implClose succeeded");
     }
 
+    @Override
     protected void implStart() {}
+    @Override
     protected void implStop() {}
 
     // IMPLEMENTATION HELPERS
@@ -212,7 +218,7 @@ final class PortMixer extends AbstractMixer {
             ports = new PortMixerPort[portInfos.length];
         }
         if (ports[index] == null) {
-            ports[index] = new PortMixerPort((Port.Info)portInfos[index], this, index);
+            ports[index] = new PortMixerPort(portInfos[index], this, index);
             return ports[index];
         }
         // $$fb TODO: return (Port) (ports[index].clone());
@@ -297,6 +303,7 @@ final class PortMixer extends AbstractMixer {
         // METHOD OVERRIDES
 
         // this is very similar to open(AudioFormat, int) in AbstractDataLine...
+        @Override
         public void open() throws LineUnavailableException {
             synchronized (mixer) {
                 // if the line is not currently open, try to open it with this format and buffer size
@@ -321,6 +328,7 @@ final class PortMixer extends AbstractMixer {
         }
 
         // this is very similar to close() in AbstractDataLine...
+        @Override
         public void close() {
             synchronized (mixer) {
                 if (isOpen()) {
@@ -370,16 +378,18 @@ final class PortMixer extends AbstractMixer {
             this.controlID = controlID;
         }
 
+        @Override
         public void setValue(boolean value) {
             if (!closed) {
                 nControlSetIntValue(controlID, value?1:0);
             }
         }
 
+        @Override
         public boolean getValue() {
             if (!closed) {
                 // never use any cached values
-                return (nControlGetIntValue(controlID)!=0)?true:false;
+                return nControlGetIntValue(controlID) != 0;
             }
             // ??
             return false;
@@ -446,12 +456,14 @@ final class PortMixer extends AbstractMixer {
             this.controlID = controlID;
         }
 
+        @Override
         public void setValue(float value) {
             if (!closed) {
                 nControlSetFloatValue(controlID, value);
             }
         }
 
+        @Override
         public float getValue() {
             if (!closed) {
                 // never use any cached values

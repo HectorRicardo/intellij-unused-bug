@@ -53,13 +53,13 @@ abstract class SunFileWriter extends AudioFileWriter {
     protected static final int bisBufferSize = 4096;
 
 
-    final AudioFileFormat.Type types[];
+    final AudioFileFormat.Type[] types;
 
 
     /**
      * Constructs a new SunParser object.
      */
-    SunFileWriter(AudioFileFormat.Type types[]) {
+    SunFileWriter(AudioFileFormat.Type[] types) {
         this.types = types;
     }
 
@@ -69,6 +69,7 @@ abstract class SunFileWriter extends AudioFileWriter {
 
     // new, 10.27.99
 
+    @Override
     public final AudioFileFormat.Type[] getAudioFileTypes(){
         AudioFileFormat.Type[] localArray = new AudioFileFormat.Type[types.length];
         System.arraycopy(types, 0, localArray, 0, types.length);
@@ -76,10 +77,13 @@ abstract class SunFileWriter extends AudioFileWriter {
     }
 
 
+    @Override
     public abstract AudioFileFormat.Type[] getAudioFileTypes(AudioInputStream stream);
 
+    @Override
     public abstract int write(AudioInputStream stream, AudioFileFormat.Type fileType, OutputStream out) throws IOException;
 
+    @Override
     public abstract int write(AudioInputStream stream, AudioFileFormat.Type fileType, File out) throws IOException;
 
 
@@ -189,12 +193,12 @@ abstract class SunFileWriter extends AudioFileWriter {
         }
 
         @Override
-        public int read(byte b[]) throws IOException {
+        public int read(byte[] b) throws IOException {
             return in.read(b);
         }
 
         @Override
-        public int read(byte b[], int off, int len) throws IOException {
+        public int read(byte[] b, int off, int len) throws IOException {
             return in.read(b, off, len);
         }
 

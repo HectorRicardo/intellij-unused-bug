@@ -63,6 +63,7 @@ public final class MidiInDeviceProvider extends AbstractMidiDeviceProvider {
 
     // implementation of abstract methods in AbstractMidiDeviceProvider
 
+    @Override
     AbstractMidiDeviceProvider.Info createInfo(int index) {
         if (!enabled) {
             return null;
@@ -70,6 +71,7 @@ public final class MidiInDeviceProvider extends AbstractMidiDeviceProvider {
         return new MidiInDeviceInfo(index, MidiInDeviceProvider.class);
     }
 
+    @Override
     MidiDevice createDevice(AbstractMidiDeviceProvider.Info info) {
         if (enabled && (info instanceof MidiInDeviceInfo)) {
             return new MidiInDevice(info);
@@ -77,6 +79,7 @@ public final class MidiInDeviceProvider extends AbstractMidiDeviceProvider {
         return null;
     }
 
+    @Override
     int getNumDevices() {
         if (!enabled) {
             if (Printer.debug)Printer.debug("MidiInDevice not enabled, returning 0 devices");
@@ -87,10 +90,14 @@ public final class MidiInDeviceProvider extends AbstractMidiDeviceProvider {
         return numDevices;
     }
 
+    @Override
     MidiDevice[] getDeviceCache() { return devices; }
-    void setDeviceCache(MidiDevice[] devices) { this.devices = devices; }
+    @Override
+    void setDeviceCache(MidiDevice[] devices) { MidiInDeviceProvider.devices = devices; }
+    @Override
     Info[] getInfoCache() { return infos; }
-    void setInfoCache(Info[] infos) { this.infos = infos; }
+    @Override
+    void setInfoCache(Info[] infos) { MidiInDeviceProvider.infos = infos; }
 
 
     // INNER CLASSES

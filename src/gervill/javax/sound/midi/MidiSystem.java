@@ -25,7 +25,6 @@
 
 package gervill.javax.sound.midi;
 
-import java.io.FileInputStream;
 import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -472,7 +471,7 @@ public class MidiSystem {
             } catch (MidiUnavailableException e) {
                 // something went wrong with synth
                 if (e instanceof MidiUnavailableException) {
-                    mue = (MidiUnavailableException) e;
+                    mue = e;
                 }
             }
             if (rec == null) {
@@ -917,7 +916,7 @@ public class MidiSystem {
                 allTypes.add(new Integer(types[j]));
             }
         }
-        int resultTypes[] = new int[allTypes.size()];
+        int[] resultTypes = new int[allTypes.size()];
         int index = 0;
         Iterator iterator = allTypes.iterator();
         while (iterator.hasNext()) {
@@ -971,7 +970,7 @@ public class MidiSystem {
                 allTypes.add(new Integer(types[j]));
             }
         }
-        int resultTypes[] = new int[allTypes.size()];
+        int[] resultTypes = new int[allTypes.size()];
         int index = 0;
         Iterator iterator = allTypes.iterator();
         while (iterator.hasNext()) {
@@ -1213,9 +1212,7 @@ public class MidiSystem {
             // try to get Synthesizer
             device = getNamedDevice(deviceName, provider, deviceClass,
                                      true, false);
-            if (device != null) {
-                return device;
-            }
+            return device;
         }
 
         return null;
@@ -1273,9 +1270,7 @@ public class MidiSystem {
             // try to get Synthesizer
             device = getNamedDevice(deviceName, providers, deviceClass,
                                      true, false);
-            if (device != null) {
-                return device;
-            }
+            return device;
         }
 
         return null;
@@ -1331,9 +1326,7 @@ public class MidiSystem {
             // try to get Synthesizer
             device = getFirstDevice(provider, deviceClass,
                                     true, false);
-            if (device != null) {
-                return device;
-            }
+            return device;
         }
 
         return null;
@@ -1385,9 +1378,7 @@ public class MidiSystem {
             // try to get Synthesizer
             device = getFirstDevice(providers, deviceClass,
                                     true, false);
-            if (device != null) {
-                return device;
-            }
+            return device;
         }
 
         return null;
@@ -1461,12 +1452,10 @@ public class MidiSystem {
                  ((device instanceof Synthesizer) && allowSynthesizer)) {
                 // And of cource, the device has to be able to provide
                 // Receivers or Transmitters.
-                if ((deviceClass == Receiver.class &&
-                     device.getMaxReceivers() != 0) ||
-                    (deviceClass == Transmitter.class &&
-                     device.getMaxTransmitters() != 0)) {
-                    return true;
-                }
+                return (deviceClass == Receiver.class &&
+                        device.getMaxReceivers() != 0) ||
+                        (deviceClass == Transmitter.class &&
+                                device.getMaxTransmitters() != 0);
             }
         }
         return false;

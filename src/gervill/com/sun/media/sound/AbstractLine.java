@@ -75,16 +75,19 @@ abstract class AbstractLine implements Line {
 
     // LINE METHODS
 
+    @Override
     public final Line.Info getLineInfo() {
         return info;
     }
 
 
+    @Override
     public final boolean isOpen() {
         return open;
     }
 
 
+    @Override
     public final void addLineListener(LineListener listener) {
         synchronized(listeners) {
             if ( ! (listeners.contains(listener)) ) {
@@ -98,6 +101,7 @@ abstract class AbstractLine implements Line {
      * Removes an audio listener.
      * @param listener listener to remove
      */
+    @Override
     public final void removeLineListener(LineListener listener) {
         listeners.removeElement(listener);
     }
@@ -109,6 +113,7 @@ abstract class AbstractLine implements Line {
      * array of length 0.
      * @return control set
      */
+    @Override
     public final Control[] getControls() {
         Control[] returnedArray = new Control[controls.length];
 
@@ -120,6 +125,7 @@ abstract class AbstractLine implements Line {
     }
 
 
+    @Override
     public final boolean isControlSupported(Control.Type controlType) {
         // protect against a NullPointerException
         if (controlType == null) {
@@ -136,6 +142,7 @@ abstract class AbstractLine implements Line {
     }
 
 
+    @Override
     public final Control getControl(Control.Type controlType) {
         // protect against a NullPointerException
         if (controlType != null) {
@@ -234,6 +241,8 @@ abstract class AbstractLine implements Line {
 
     // ABSTRACT METHODS
 
+    @Override
     public abstract void open() throws LineUnavailableException;
+    @Override
     public abstract void close();
 }

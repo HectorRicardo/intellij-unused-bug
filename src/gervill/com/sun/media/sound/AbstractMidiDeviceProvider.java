@@ -118,6 +118,7 @@ public abstract class AbstractMidiDeviceProvider extends MidiDeviceProvider {
     }
 
 
+    @Override
     public final MidiDevice.Info[] getDeviceInfo() {
         readDeviceInfos();
         Info[] infos = getInfoCache();
@@ -127,6 +128,7 @@ public abstract class AbstractMidiDeviceProvider extends MidiDeviceProvider {
     }
 
 
+    @Override
     public final MidiDevice getDevice(MidiDevice.Info info) {
         if (info instanceof Info) {
             readDeviceInfos();

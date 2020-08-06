@@ -52,10 +52,12 @@ public final class SoftReceiver implements MidiDeviceReceiver {
             this.midimessages = mainmixer.midimessages;
     }
 
+    @Override
     public MidiDevice getMidiDevice() {
         return synth;
     }
 
+    @Override
     public void send(MidiMessage message, long timeStamp) {
 
         synchronized (control_mutex) {
@@ -80,6 +82,7 @@ public final class SoftReceiver implements MidiDeviceReceiver {
         }
     }
 
+    @Override
     public void close() {
         synchronized (control_mutex) {
             open = false;

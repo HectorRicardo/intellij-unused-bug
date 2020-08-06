@@ -99,7 +99,7 @@ public interface TargetDataLine extends DataLine {
      * see Line#isOpen
      * see LineEvent
      */
-    public void open(AudioFormat format, int bufferSize) throws LineUnavailableException;
+    void open(AudioFormat format, int bufferSize) throws LineUnavailableException;
 
 
     /**
@@ -137,7 +137,7 @@ public interface TargetDataLine extends DataLine {
      * see Line#isOpen
      * see LineEvent
      */
-    public void open(AudioFormat format) throws LineUnavailableException;
+    void open(AudioFormat format) throws LineUnavailableException;
 
 
     /**
@@ -179,7 +179,7 @@ public interface TargetDataLine extends DataLine {
      * see SourceDataLine#write
      * see DataLine#available
      */
-    public int read(byte[] b, int off, int len);
+    int read(byte[] b, int off, int len);
 
     /**
      * Obtains the number of sample frames of audio data that can be read from

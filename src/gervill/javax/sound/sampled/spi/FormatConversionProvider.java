@@ -25,8 +25,6 @@
 
 package gervill.javax.sound.sampled.spi;
 
-import java.io.InputStream;
-
 import gervill.javax.sound.sampled.AudioFormat;
 import gervill.javax.sound.sampled.AudioInputStream;
 
@@ -81,7 +79,7 @@ public abstract class FormatConversionProvider {
      */
     public boolean isSourceEncodingSupported(AudioFormat.Encoding sourceEncoding){
 
-        AudioFormat.Encoding sourceEncodings[] = getSourceEncodings();
+        AudioFormat.Encoding[] sourceEncodings = getSourceEncodings();
 
         for(int i=0; i<sourceEncodings.length; i++) {
             if( sourceEncoding.equals( sourceEncodings[i]) ) {
@@ -100,7 +98,7 @@ public abstract class FormatConversionProvider {
      */
     public boolean isTargetEncodingSupported(AudioFormat.Encoding targetEncoding){
 
-        AudioFormat.Encoding targetEncodings[] = getTargetEncodings();
+        AudioFormat.Encoding[] targetEncodings = getTargetEncodings();
 
         for(int i=0; i<targetEncodings.length; i++) {
             if( targetEncoding.equals( targetEncodings[i]) ) {
@@ -131,7 +129,7 @@ public abstract class FormatConversionProvider {
      */
     public boolean isConversionSupported(AudioFormat.Encoding targetEncoding, AudioFormat sourceFormat){
 
-        AudioFormat.Encoding targetEncodings[] = getTargetEncodings(sourceFormat);
+        AudioFormat.Encoding[] targetEncodings = getTargetEncodings(sourceFormat);
 
         for(int i=0; i<targetEncodings.length; i++) {
             if( targetEncoding.equals( targetEncodings[i]) ) {
@@ -163,7 +161,7 @@ public abstract class FormatConversionProvider {
      */
     public boolean isConversionSupported(AudioFormat targetFormat, AudioFormat sourceFormat){
 
-        AudioFormat targetFormats[] = getTargetFormats( targetFormat.getEncoding(), sourceFormat );
+        AudioFormat[] targetFormats = getTargetFormats( targetFormat.getEncoding(), sourceFormat );
 
         for(int i=0; i<targetFormats.length; i++) {
             if( targetFormat.matches( targetFormats[i] ) ) {

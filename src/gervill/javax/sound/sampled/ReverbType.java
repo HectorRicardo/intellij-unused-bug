@@ -144,32 +144,32 @@ public class ReverbType {
     /**
      * Descriptive name of the reverb type..
      */
-    private String name;
+    private final String name;
 
     /**
      * Early reflection delay in microseconds.
      */
-    private int earlyReflectionDelay;
+    private final int earlyReflectionDelay;
 
     /**
      * Early reflection intensity.
      */
-    private float earlyReflectionIntensity;
+    private final float earlyReflectionIntensity;
 
     /**
      * Late reflection delay in microseconds.
      */
-    private int lateReflectionDelay;
+    private final int lateReflectionDelay;
 
     /**
      * Late reflection intensity.
      */
-    private float lateReflectionIntensity;
+    private final float lateReflectionIntensity;
 
     /**
      * Total decay time
      */
-    private int decayTime;
+    private final int decayTime;
 
 
     /**
@@ -265,6 +265,7 @@ public class ReverbType {
      * @return <code>true</code> if this reverb type is the same as
      * <code>obj</code>; <code>false</code> otherwise
      */
+    @Override
     public final boolean equals(Object obj) {
         return super.equals(obj);
     }
@@ -273,6 +274,7 @@ public class ReverbType {
     /**
      * Finalizes the hashcode method.
      */
+    @Override
     public final int hashCode() {
         return super.hashCode();
     }
@@ -285,6 +287,7 @@ public class ReverbType {
      * Java Sound.
      * @return reverberation type name and description
      */
+    @Override
     public final String toString() {
 
         //$$fb2001-07-20: fix for bug 4385060: The "name" attribute of class "ReverbType" is not accessible.

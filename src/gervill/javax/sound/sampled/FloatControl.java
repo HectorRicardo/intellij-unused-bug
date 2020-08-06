@@ -62,23 +62,23 @@ public abstract class FloatControl extends Control {
     /**
      * The minimum supported value.
      */
-    private float minimum;
+    private final float minimum;
 
     /**
      * The maximum supported value.
      */
-    private float maximum;
+    private final float maximum;
 
     /**
      * The control's precision.
      */
-    private float precision;
+    private final float precision;
 
     /**
      * The smallest time increment in which a value change
      * can be effected during a value shift, in microseconds.
      */
-    private int updatePeriod;
+    private final int updatePeriod;
 
 
     /**
@@ -324,17 +324,10 @@ public abstract class FloatControl extends Control {
      * to complete.  An implementation should complete the operation within the time
      * specified.  The default implementation simply changes the value
      * to the final value immediately.
-     *
-     * @param from initial value at the beginning of the shift
+     *  @param from initial value at the beginning of the shift
      * @param to final value after the shift
-     * @param microseconds maximum duration of the shift in microseconds
-     *
-     * throws IllegalArgumentException if either {@code from} or {@code to}
-     *     value does not fall within the allowable range
-     *
-     * see #getUpdatePeriod
      */
-    public void shift(float from, float to, int microseconds) {
+    public void shift(float from, float to) {
         // test "from" value, "to" value will be tested by setValue()
         if (from < minimum) {
             throw new IllegalArgumentException("Requested value " + from
@@ -355,9 +348,10 @@ public abstract class FloatControl extends Control {
      * Provides a string representation of the control
      * @return a string description
      */
+    @Override
     public String toString() {
-        return new String(getType() + " with current value: " + getValue() + " " + units +
-                          " (range: " + minimum + " - " + maximum + ")");
+        return getType() + " with current value: " + getValue() + " " + units +
+                " (range: " + minimum + " - " + maximum + ")";
     }
 
 

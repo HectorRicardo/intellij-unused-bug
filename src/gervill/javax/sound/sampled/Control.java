@@ -81,8 +81,9 @@ public abstract class Control {
      * Obtains a String describing the control type and its current state.
      * @return a String representation of the Control.
      */
+    @Override
     public String toString() {
-        return new String(getType() + " Control");
+        return getType() + " Control";
     }
 
 
@@ -100,7 +101,7 @@ public abstract class Control {
         /**
          * Type name.
          */
-        private String name;
+        private final String name;
 
 
         // CONSTRUCTOR
@@ -121,6 +122,7 @@ public abstract class Control {
         /**
          * Finalizes the equals method
          */
+        @Override
         public final boolean equals(Object obj) {
             return super.equals(obj);
         }
@@ -128,6 +130,7 @@ public abstract class Control {
         /**
          * Finalizes the hashCode method
          */
+        @Override
         public final int hashCode() {
             return super.hashCode();
         }
@@ -138,6 +141,7 @@ public abstract class Control {
          *
          * @return the control type name
          */
+        @Override
         public final String toString() {
             return name;
         }

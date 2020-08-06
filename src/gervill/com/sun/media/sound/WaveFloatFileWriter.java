@@ -43,10 +43,12 @@ import gervill.javax.sound.sampled.spi.AudioFileWriter;
  */
 public final class WaveFloatFileWriter extends AudioFileWriter {
 
+    @Override
     public Type[] getAudioFileTypes() {
         return new Type[] { Type.WAVE };
     }
 
+    @Override
     public Type[] getAudioFileTypes(AudioInputStream stream) {
 
         if (!stream.getFormat().getEncoding().equals(Encoding.PCM_FLOAT))
@@ -92,18 +94,22 @@ public final class WaveFloatFileWriter extends AudioFileWriter {
             this.out = out;
         }
 
+        @Override
         public void write(int b) throws IOException {
             out.write(b);
         }
 
+        @Override
         public void flush() throws IOException {
             out.flush();
         }
 
+        @Override
         public void write(byte[] b, int off, int len) throws IOException {
             out.write(b, off, len);
         }
 
+        @Override
         public void write(byte[] b) throws IOException {
             out.write(b);
         }
@@ -118,6 +124,7 @@ public final class WaveFloatFileWriter extends AudioFileWriter {
         return AudioSystem.getAudioInputStream(targetFormat, ais);
     }
 
+    @Override
     public int write(AudioInputStream stream, Type fileType, OutputStream out)
             throws IOException {
 
@@ -131,6 +138,7 @@ public final class WaveFloatFileWriter extends AudioFileWriter {
         return fpointer;
     }
 
+    @Override
     public int write(AudioInputStream stream, Type fileType, File out)
             throws IOException {
         checkFormat(fileType, stream);

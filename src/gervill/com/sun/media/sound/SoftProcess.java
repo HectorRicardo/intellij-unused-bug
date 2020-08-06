@@ -31,11 +31,12 @@ package gervill.com.sun.media.sound;
  */
 public interface SoftProcess extends SoftControl {
 
-    public void init(SoftSynthesizer synth);
+    void init(SoftSynthesizer synth);
 
-    public double[] get(int instance, String name);
+    @Override
+    double[] get(int instance, String name);
 
-    public void processControlLogic();
+    void processControlLogic();
 
-    public void reset();
+    void reset();
 }

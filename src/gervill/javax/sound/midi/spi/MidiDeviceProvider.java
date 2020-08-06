@@ -47,7 +47,7 @@ public abstract class MidiDeviceProvider {
      */
     public boolean isDeviceSupported(MidiDevice.Info info) {
 
-        MidiDevice.Info infos[] = getDeviceInfo();
+        MidiDevice.Info[] infos = getDeviceInfo();
 
         for(int i=0; i<infos.length; i++) {
             if( info.equals( infos[i] ) ) {

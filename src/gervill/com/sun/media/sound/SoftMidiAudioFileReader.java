@@ -54,7 +54,7 @@ import gervill.javax.sound.sampled.spi.AudioFileReader;
 public final class SoftMidiAudioFileReader extends AudioFileReader {
 
     public static final Type MIDI = new Type("MIDI", "mid");
-    private static AudioFormat format = new AudioFormat(44100, 16, 2, true, false);
+    private static final AudioFormat format = new AudioFormat(44100, 16, 2, true, false);
 
     public AudioFileFormat getAudioFileFormat(Sequence seq)
             throws UnsupportedAudioFileException, IOException {
@@ -66,7 +66,7 @@ public final class SoftMidiAudioFileReader extends AudioFileReader {
 
     public AudioInputStream getAudioInputStream(Sequence seq)
             throws UnsupportedAudioFileException, IOException {
-        AudioSynthesizer synth = (AudioSynthesizer) new SoftSynthesizer();
+        AudioSynthesizer synth = new SoftSynthesizer();
         AudioInputStream stream;
         Receiver recv;
         try {
@@ -128,6 +128,7 @@ public final class SoftMidiAudioFileReader extends AudioFileReader {
         return stream;
     }
 
+    @Override
     public AudioInputStream getAudioInputStream(InputStream inputstream)
             throws UnsupportedAudioFileException, IOException {
 
@@ -145,6 +146,7 @@ public final class SoftMidiAudioFileReader extends AudioFileReader {
         return getAudioInputStream(seq);
     }
 
+    @Override
     public AudioFileFormat getAudioFileFormat(URL url)
             throws UnsupportedAudioFileException, IOException {
         Sequence seq;
@@ -158,6 +160,7 @@ public final class SoftMidiAudioFileReader extends AudioFileReader {
         return getAudioFileFormat(seq);
     }
 
+    @Override
     public AudioFileFormat getAudioFileFormat(File file)
             throws UnsupportedAudioFileException, IOException {
         Sequence seq;
@@ -171,6 +174,7 @@ public final class SoftMidiAudioFileReader extends AudioFileReader {
         return getAudioFileFormat(seq);
     }
 
+    @Override
     public AudioInputStream getAudioInputStream(URL url)
             throws UnsupportedAudioFileException, IOException {
         Sequence seq;
@@ -184,6 +188,7 @@ public final class SoftMidiAudioFileReader extends AudioFileReader {
         return getAudioInputStream(seq);
     }
 
+    @Override
     public AudioInputStream getAudioInputStream(File file)
             throws UnsupportedAudioFileException, IOException {
         if (!file.getName().toLowerCase().endsWith(".mid"))
@@ -199,6 +204,7 @@ public final class SoftMidiAudioFileReader extends AudioFileReader {
         return getAudioInputStream(seq);
     }
 
+    @Override
     public AudioFileFormat getAudioFileFormat(InputStream inputstream)
             throws UnsupportedAudioFileException, IOException {
 

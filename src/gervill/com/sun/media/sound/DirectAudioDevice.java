@@ -52,10 +52,10 @@ final class DirectAudioDevice extends AbstractMixer {
     // INSTANCE VARIABLES
 
     /** number of opened lines */
-    private int deviceCountOpened = 0;
+    private final int deviceCountOpened = 0;
 
     /** number of started lines */
-    private int deviceCountStarted = 0;
+    private final int deviceCountStarted = 0;
 
     // CONSTRUCTOR
     DirectAudioDevice(DirectAudioDeviceProvider.DirectAudioDeviceInfo portMixerInfo) {
@@ -168,6 +168,7 @@ final class DirectAudioDevice extends AbstractMixer {
 
     // ABSTRACT MIXER: ABSTRACT METHOD IMPLEMENTATIONS
 
+    @Override
     public Line getLine(Line.Info info) throws LineUnavailableException {
         Line.Info fullInfo = getLineInfo(info);
         if (fullInfo == null) {
@@ -217,6 +218,7 @@ final class DirectAudioDevice extends AbstractMixer {
     }
 
 
+    @Override
     public int getMaxLines(Line.Info info) {
         Line.Info fullInfo = getLineInfo(info);
 
@@ -234,18 +236,22 @@ final class DirectAudioDevice extends AbstractMixer {
     }
 
 
+    @Override
     protected void implOpen() throws LineUnavailableException {
         if (Printer.trace) Printer.trace("DirectAudioDevice: implOpen - void method");
     }
 
+    @Override
     protected void implClose() {
         if (Printer.trace) Printer.trace("DirectAudioDevice: implClose - void method");
     }
 
+    @Override
     protected void implStart() {
         if (Printer.trace) Printer.trace("DirectAudioDevice: implStart - void method");
     }
 
+    @Override
     protected void implStop() {
         if (Printer.trace) Printer.trace("DirectAudioDevice: implStop - void method");
     }
@@ -419,6 +425,7 @@ final class DirectAudioDevice extends AbstractMixer {
 
         // ABSTRACT LINE / DATALINE
 
+        @Override
         void implOpen(AudioFormat format, int bufferSize) throws LineUnavailableException {
             if (Printer.trace) Printer.trace(">> DirectDL: implOpen("+format+", "+bufferSize+" bytes)");
 
@@ -495,7 +502,7 @@ final class DirectAudioDevice extends AbstractMixer {
             }
 
             // align buffer to full frames
-            bufferSize = ((int) bufferSize / format.getFrameSize()) * format.getFrameSize();
+            bufferSize = (bufferSize / format.getFrameSize()) * format.getFrameSize();
 
             id = nOpen(mixerIndex, deviceID, isSource,
                     encoding,
@@ -539,6 +546,7 @@ final class DirectAudioDevice extends AbstractMixer {
         }
 
 
+        @Override
         void implStart() {
             if (Printer.trace) Printer.trace(" >> DirectDL: implStart()");
 
@@ -571,6 +579,7 @@ final class DirectAudioDevice extends AbstractMixer {
             if (Printer.trace) Printer.trace("<< DirectDL: implStart() succeeded");
         }
 
+        @Override
         void implStop() {
             if (Printer.trace) Printer.trace(">> DirectDL: implStop()");
 
@@ -601,6 +610,7 @@ final class DirectAudioDevice extends AbstractMixer {
             if (Printer.trace) Printer.trace(" << DirectDL: implStop() succeeded");
         }
 
+        @Override
         void implClose() {
             if (Printer.trace) Printer.trace(">> DirectDL: implClose()");
 
@@ -628,6 +638,7 @@ final class DirectAudioDevice extends AbstractMixer {
 
         // METHOD OVERRIDES
 
+        @Override
         public int available() {
             if (id == 0) {
                 return 0;
@@ -640,6 +651,7 @@ final class DirectAudioDevice extends AbstractMixer {
         }
 
 
+        @Override
         public void drain() {
             noService = true;
             // additional safeguard against draining forever
@@ -682,6 +694,7 @@ final class DirectAudioDevice extends AbstractMixer {
             noService = false;
         }
 
+        @Override
         public void flush() {
             if (id != 0) {
                 // first stop ongoing read/write method
@@ -700,6 +713,7 @@ final class DirectAudioDevice extends AbstractMixer {
         }
 
         // replacement for getFramePosition (see AbstractDataLine)
+        @Override
         public long getLongFramePosition() {
             long pos;
             synchronized (lockNative) {
@@ -789,6 +803,7 @@ final class DirectAudioDevice extends AbstractMixer {
         }
 
         // called from event dispatcher for lines that need servicing
+        @Override
         public void checkLine() {
             synchronized (lockNative) {
                 if (monitoring
@@ -847,6 +862,7 @@ final class DirectAudioDevice extends AbstractMixer {
                       "dB", "Minimum", "", "Maximum");
             }
 
+            @Override
             public void setValue(float newValue) {
                 // adjust value within range ?? spec says IllegalArgumentException
                 //newValue = Math.min(newValue, getMaximum());
@@ -871,6 +887,7 @@ final class DirectAudioDevice extends AbstractMixer {
                 super(BooleanControl.Type.MUTE, false, "True", "False");
             }
 
+            @Override
             public void setValue(boolean newValue) {
                 super.setValue(newValue);
                 calcVolume();
@@ -884,6 +901,7 @@ final class DirectAudioDevice extends AbstractMixer {
                       "", "Left", "Center", "Right");
             }
 
+            @Override
             public void setValue(float newValue) {
                 setValueImpl(newValue);
                 panControl.setValueImpl(newValue);
@@ -903,6 +921,7 @@ final class DirectAudioDevice extends AbstractMixer {
                       "", "Left", "Center", "Right");
             }
 
+            @Override
             public void setValue(float newValue) {
                 setValueImpl(newValue);
                 balanceControl.setValueImpl(newValue);
@@ -952,6 +971,7 @@ final class DirectAudioDevice extends AbstractMixer {
 
         // METHOD OVERRIDES
 
+        @Override
         public int read(byte[] b, int off, int len) {
             flushing = false;
             if (len == 0) {
@@ -1047,6 +1067,7 @@ final class DirectAudioDevice extends AbstractMixer {
 
         // CLIP METHODS
 
+        @Override
         public void open(AudioFormat format, byte[] data, int offset, int bufferSize)
             throws LineUnavailableException {
 
@@ -1118,6 +1139,7 @@ final class DirectAudioDevice extends AbstractMixer {
         }
 
 
+        @Override
         public void open(AudioInputStream stream) throws LineUnavailableException, IOException {
 
             // $$fb part of fix for 4679187: Clip.open() throws unexpected Exceptions
@@ -1197,16 +1219,19 @@ final class DirectAudioDevice extends AbstractMixer {
         }
 
 
+        @Override
         public int getFrameLength() {
             return m_lengthInFrames;
         }
 
 
+        @Override
         public long getMicrosecondLength() {
             return Toolkit.frames2micros(getFormat(), getFrameLength());
         }
 
 
+        @Override
         public void setFramePosition(int frames) {
             if (Printer.trace) Printer.trace("> DirectClip: setFramePosition: " + frames);
 
@@ -1247,6 +1272,7 @@ final class DirectAudioDevice extends AbstractMixer {
         }
 
         // replacement for getFramePosition (see AbstractDataLine)
+        @Override
         public long getLongFramePosition() {
             /* $$fb
              * this would be intuitive, but the definition of getFramePosition
@@ -1262,6 +1288,7 @@ final class DirectAudioDevice extends AbstractMixer {
         }
 
 
+        @Override
         public synchronized void setMicrosecondPosition(long microseconds) {
             if (Printer.trace) Printer.trace("> DirectClip: setMicrosecondPosition: " + microseconds);
 
@@ -1271,6 +1298,7 @@ final class DirectAudioDevice extends AbstractMixer {
             if (Printer.trace) Printer.trace("< DirectClip: setMicrosecondPosition succeeded");
         }
 
+        @Override
         public void setLoopPoints(int start, int end) {
             if (Printer.trace) Printer.trace("> DirectClip: setLoopPoints: start: " + start + " end: " + end);
 
@@ -1302,6 +1330,7 @@ final class DirectAudioDevice extends AbstractMixer {
         }
 
 
+        @Override
         public void loop(int count) {
             // note: when count reaches 0, it means that the entire clip
             // will be played, i.e. it will play past the loop end point
@@ -1313,6 +1342,7 @@ final class DirectAudioDevice extends AbstractMixer {
 
         // ABSTRACT LINE
 
+        @Override
         void implOpen(AudioFormat format, int bufferSize) throws LineUnavailableException {
             // only if audioData wasn't set in a calling open(format, byte[], frameSize)
             // this call is allowed.
@@ -1322,6 +1352,7 @@ final class DirectAudioDevice extends AbstractMixer {
             super.implOpen(format, bufferSize);
         }
 
+        @Override
         void implClose() {
             if (Printer.trace) Printer.trace(">> DirectClip: implClose()");
 
@@ -1352,12 +1383,14 @@ final class DirectAudioDevice extends AbstractMixer {
         }
 
 
+        @Override
         void implStart() {
             if (Printer.trace) Printer.trace("> DirectClip: implStart()");
             super.implStart();
             if (Printer.trace) Printer.trace("< DirectClip: implStart() succeeded");
         }
 
+        @Override
         void implStop() {
             if (Printer.trace) Printer.trace(">> DirectClip: implStop()");
 
@@ -1371,6 +1404,7 @@ final class DirectAudioDevice extends AbstractMixer {
 
 
         // main playback loop
+        @Override
         public void run() {
             if (Printer.trace) Printer.trace(">>> DirectClip: run() threadID="+Thread.currentThread().getId());
             Thread curThread = Thread.currentThread();
@@ -1405,7 +1439,7 @@ final class DirectAudioDevice extends AbstractMixer {
                     if (toWriteBytes > getBufferSize()) {
                         toWriteBytes = Toolkit.align(getBufferSize(), frameSize);
                     }
-                    int written = write(audioData, (int) clipBytePosition, toWriteBytes); // increases bytePosition
+                    int written = write(audioData, clipBytePosition, toWriteBytes); // increases bytePosition
                     clipBytePosition += written;
                     // make sure nobody called setFramePosition, or stop() during the write() call
                     if (doIO && newFramePosition < 0 && written >= 0) {
@@ -1442,10 +1476,12 @@ final class DirectAudioDevice extends AbstractMixer {
            MixerClip. They should be moved to a base class, together
            with the instance variable 'autoclosing'. */
 
+        @Override
         public boolean isAutoClosing() {
             return autoclosing;
         }
 
+        @Override
         public void setAutoClosing(boolean value) {
             if (value != autoclosing) {
                 if (isOpen()) {
@@ -1459,6 +1495,7 @@ final class DirectAudioDevice extends AbstractMixer {
             }
         }
 
+        @Override
         protected boolean requiresServicing() {
             // no need for servicing for Clips
             return false;
